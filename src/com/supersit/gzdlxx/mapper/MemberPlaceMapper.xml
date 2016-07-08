@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.supersit.gzdlxx.dao.MemberPlaceDao">
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+	<insert id="add" parameterType="com.supersit.gzdlxx.pojo.MemberPlaceItem">
+	 insert  into memberplace(
+	 id,
+	 memberid,
+	 longitud,
+	 latitude,
+	 addtime
+	 ) values(
+	 #{id},
+	 #{memberid},
+	 #{longitud},
+	 #{latitude},
+	 #{addtime}
+	 )
+	</insert>
+	<select id="selectMemberByArea"  resultType="com.supersit.gzdlxx.pojo.MemberResponse">
+		select m.id,m.username,m.imgpath,m.remark from memberplace  p left join member m on p.memberid=m.id 
+		where p.longitud &gt; #{left}  
+            and p.longitud &lt; #{right}  
+            and p.latitude &gt; #{down} 
+            and p.latitude &lt; #{top} 
+        	limit #{start},#{end}
+	</select>
+	<select id="selectByMemberid" resultType="com.supersit.gzdlxx.pojo.MemberPlaceItem">
+		select * from memberplace where memberid=#{memberid} order by addtime desc
+	</select>
+</mapper>

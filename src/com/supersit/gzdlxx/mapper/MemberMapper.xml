@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--parameterType=入参   resultType=返回类型-->
+<mapper namespace="com.supersit.gzdlxx.dao.MemberDao">
+	<insert id="add" parameterType="com.supersit.gzdlxx.pojo.MemberItem">
+	  insert into member(
+	  id,
+	  username,
+	  password,
+	  mobile,
+	  sex,
+	  imgpath,
+	  addtime,
+	  isdelete
+	  ) values(
+	   #{id},
+	   #{username},
+	   #{password},
+	   #{mobile},
+	   #{sex},
+	   #{imgpath},
+	   #{addtime},
+	   1
+	  )
+	</insert>
+	<select id="searchbyusername" parameterType="java.lang.String" resultType="com.supersit.gzdlxx.pojo.MemberItem">
+		select * from member where username=#{username} and isdelete=1
+	</select>
+	
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+	<select id="searchbymobile" parameterType="java.lang.String" resultType="com.supersit.gzdlxx.pojo.MemberItem">
+		select * from member where mobile=#{mobile} and isdelete=1
+	</select>
+	
+	<update id="updatepassword" parameterType="java.lang.String">
+	 	update member set password=#{password} where mobile=#{mobile}
+	</update>
+	
+	<update id="updateMember" parameterType="com.supersit.gzdlxx.pojo.MemberItem">
+	  	update member
+	  	<set>
+	  	 imgpath=#{imgpath},
+	  	 username=#{username},
+	  	 sex=#{sex},
+	  	 remark=#{remark}
+	  	</set> 
+	  	where id=#{id}
+	</update>
+	<select id="selectMember" resultType="com.supersit.gzdlxx.pojo.MemberResponse">
+		select id,username,remark,imgpath from member where isdelete=1 order by focuson desc limit #{start},#{end}
+	</select>
+	<update id="updateFocuson">
+		update member set focuson=#{focuson}+1 where id=#{id}
+	</update>
+	<update id="updateFans">
+		update member set fans=#{fans}+1 where id=#{id}
+	</update>
+	<select id="selectMemberById" resultType="com.supersit.gzdlxx.pojo.MemberItem">
+		select * from member where id=#{id}
+	</select>
+	<select id="selectMemberByUsername" resultType="com.supersit.gzdlxx.pojo.MemberResponse">
+		select  id,username,remark,imgpath from member where isdelete=1 and username like "%"#{username}"%" 
+				order by focuson desc limit #{start},#{end}
+	</select>
+</mapper>
