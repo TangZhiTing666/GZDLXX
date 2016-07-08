@@ -5,7 +5,14 @@
   Time: 17:22
   To change this template use File | Settings | File Templates.
 --%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//设置日期格式
+String date=df.format(new Date());// new Date()为获取当前系统时间 
+System.out.println("-------------------------------------------------"+date+"------------------------------");
+%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -195,7 +202,8 @@
 </div>
 
 <div style="text-align:center;">
-  <p>来源：<a href="http://www.mycodes.net/" target="_blank">牛逼的应用</a></p>
+
+  <p>来源：<a href="http://www.mycodes.net/" target="_blank">牛逼的应用</a><%=date %> </p>
 </div>
 
 </body>

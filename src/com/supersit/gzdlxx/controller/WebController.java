@@ -71,6 +71,7 @@ public class WebController {
         MemberItem member=(MemberItem)result.getResultdata();
         session.setAttribute("memberLogin",member);
         session.setAttribute("username", member.getUsername());
+        session.setMaxInactiveInterval(5*60);
         //设置Cookie，用户Id和用户的真实姓名
         Cookie userId = new Cookie("userId",member.getId()) ;
         logger.debug("登录成功："+member.getUsername());
