@@ -82,10 +82,10 @@
 	<!-- <bean id="dsWx" 
 		class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
-		<property name="url" value="#{jdbc.url_wx}"/>
+		<property name="url" value="#{jdbc.url}"/>
 		<property name="driverClassName" value="#{jdbc.driver}"/>
-		<property name="username" value="#{jdbc.user_wx}"/>
-		<property name="password" value="#{jdbc.password_wx}"/>
+		<property name="username" value="#{jdbc.user_clz}"/>
+		<property name="password" value="#{jdbc.password_clz}"/>
 		初始化连接大小  
         <property name="initialSize" value="#{jdbc.initialSize}"/>
         <property name="maxActive" value="#{jdbc.maxActive}"/>
@@ -148,9 +148,10 @@
 			<mvc:mapping path="/**"/>
 			<bean class="com.supersit.gzdlxx.interceptor.loginInterceptor">
 				<property name="excludedUrls">
-					<list>
-						<value>/toLogin.do</value>
+					<list>						
 						<value>/login.do</value>
+						<value>/choose.do</value>
+						<value>/main.do</value>
 					</list>
 				</property>
 			</bean>

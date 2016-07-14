@@ -1,0 +1,1072 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title></title>
+    <style type="text/css">
+        table{text-align: center;} 
+        .disnone{display: none;}
+        span{display: inline;}
+        .td1{width: 20%}
+    </style>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="js/jquery.jqprint-0.3.js"></script>
+    
+    <link rel="stylesheet" href="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/dijit/themes/tundra/tundra.css">
+    <link rel="stylesheet" href="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/esri/css/esri.css">
+    <link rel="stylesheet" href="css/map.css">
+
+    <link rel="stylesheet" type="text/css" href="css/css/style.css" media="screen"/>
+    <script src="js/jquery.paginate.js" type="text/javascript"></script>
+    
+<script>var dojoConfig = { parseOnLoad: true };</script>
+<script src="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/init.js"></script>
+ <script type="text/javascript">
+       $(function(){   
+           //导航切换
+           $(".menuson .header").click(function(){
+               var $parent = $(this).parent();
+               $(".menuson>li.active").not($parent).removeClass("active open").find('.sub-menus').hide();
+               
+               $parent.addClass("active");
+               if(!!$(this).next('.sub-menus').size()){
+                   if($parent.hasClass("open")){
+                       $parent.removeClass("open").find('.sub-menus').hide();
+                   }else{
+                       $parent.addClass("open").find('.sub-menus').show(); 
+                   }
+                   
+                   
+               }
+           });
+           
+           // 三级菜单点击
+           $('.sub-menus li').click(function(e) {
+               $(".sub-menus li.active").removeClass("active")
+               $(this).addClass("active");
+           });
+           
+           $('.title').click(function(){
+               var $ul = $(this).next('ul');
+               $('dd').find('.menuson').slideUp();
+               if($ul.is(':visible')){
+                   $(this).next('.menuson').slideUp();
+               }else{
+                   $(this).next('.menuson').slideDown();
+               }
+           });
+       })  
+   </script>
+   <script type="text/javascript">
+   var map,layer,southCarolinaCounties,bzh04LayerURL,bzh07LayerURL,bzh10LayerURL;
+
+  require([
+    "esri/map", 
+    "esri/layers/ArcGISTiledMapServiceLayer", 
+    "esri/dijit/LayerList",
+    "esri/InfoTemplate",
+    "dojo/dom-construct",
+    "esri/dijit/Popup",
+    "esri/layers/ArcGISDynamicMapServiceLayer",
+    "esri/layers/GraphicsLayer",
+    "esri/layers/FeatureLayer",
+    "esri/symbols/SimpleFillSymbol",
+    "esri/symbols/SimpleLineSymbol",
+    "esri/Color",
+    "esri/graphic",
+    "esri/geometry/Point",
+    "esri/SpatialReference", 
+    "esri/geometry/Polygon",  
+    "dojo/domReady!"
+], function(Map, ArcGISTiledMapServiceLayer,LayerList,InfoTemplate,domConstruct, Popup,ArcGISDynamicMapServiceLayer,GraphicsLayer,FeatureLayer,SimpleFillSymbol,SimpleLineSymbol,Color,Graphic,Point,SpatialReference,Polygon) {
+    var popup = new Popup({
+        fillSymbol: null,
+        lineSymbol: null,
+        markerSymbol: null
+      }, domConstruct.create("div"));
+
+      map = new Map("map", {
+            logo: false,
+            sliderStyle: "large",
+            infoWindow: popup
+          });
+
+      var baseMapLayer = new ArcGISTiledMapServiceLayer("http://58.62.200.71:8399/arcgis/rest/services/GzBaseMap/MapServer",{id:"广州市地图"});
+      map.addLayer(baseMapLayer);
+
+      var _blockGroupInfoTemplate = new InfoTemplate();
+      _blockGroupInfoTemplate.setTitle("<b>详细信息</b>");
+
+      var _censusInfoContent =
+        "<table class='infoPopup'><tr><td class='td1'>项目名称：</td><td>${项目名称}</td></tr><tr><td class='td1'>所在区：</td><td>${所在区}</td></tr><tr><td class='td1'>项目情况：</td><td>${项目情况}</td></tr></table>";
+      
+      _blockGroupInfoTemplate.setContent(_censusInfoContent);
+
+      bzh04LayerURL = "http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9004/MapServer";
+      bzh07LayerURL = "http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9007/MapServer";
+      bzh10LayerURL = "http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9010/MapServer";
+
+      var bzh04LayerOptions = {
+        "id": "标准化农田2004",
+        "opacity": 1,
+        "showAttribution": false
+      };
+      var bzh07LayerOptions = {
+        "id": "标准化农田2007",
+        "opacity": 1,
+        "showAttribution": false
+      };
+      var bzh10LayerOptions = {
+        "id": "标准化农田2010",
+        "opacity": 1,
+        "showAttribution": false
+      };
+  
+      var bzh04Layer = new ArcGISDynamicMapServiceLayer(bzh04LayerURL, bzh04LayerOptions);
+      var bzh07Layer = new ArcGISDynamicMapServiceLayer(bzh07LayerURL, bzh07LayerOptions);
+      var bzh10Layer = new ArcGISDynamicMapServiceLayer(bzh10LayerURL, bzh10LayerOptions);
+
+      bzh04Layer.setInfoTemplates({
+        0: { infoTemplate: _blockGroupInfoTemplate }
+      });
+      bzh07Layer.setInfoTemplates({
+        0: { infoTemplate: _blockGroupInfoTemplate }
+      });
+      bzh10Layer.setInfoTemplates({
+        0: { infoTemplate: _blockGroupInfoTemplate }
+      });
+
+      map.addLayer(bzh04Layer);
+
+      map.infoWindow.resize(350, 200);
+
+      var layerList04 = new LayerList({
+        map: map,    
+        showSubLayers: false    
+      },"layerList04");
+     
+      $(".mapChoose").click(function(){
+        $(".mapChoose").removeClass("map-selected");
+        if($(this).attr("id")==="bzh04"){
+          $(this).addClass("map-selected");
+          $(".info-list").empty(); 
+          map.removeLayer(bzh04Layer);
+          map.removeLayer(bzh07Layer);
+          map.removeLayer(bzh10Layer);
+          map.removeLayer(layer);
+          map.infoWindow.hide();
+          map.addLayer(bzh04Layer);
+          $("#layerList07").css("display","none");
+          $("#layerList10").css("display","none");
+          $("#layerList04").css("display","block");
+          
+        }
+        else if($(this).attr("id")==="bzh07"){
+          $(this).addClass("map-selected");
+          $(".info-list").empty(); 
+          map.removeLayer(bzh04Layer);
+          map.removeLayer(bzh07Layer);
+          map.removeLayer(bzh10Layer);
+          map.removeLayer(layer);
+          map.infoWindow.hide();
+          map.addLayer(bzh07Layer);
+
+          $("#layerList04").css("display","none");
+          $("#layerList10").css("display","none");
+          $("#layerList07").css("display","block");
+          var layerList07 = new LayerList({
+            map: map,    
+            showSubLayers: false    
+          },"layerList07");
+          layerList07.startup();
+        }
+        else if($(this).attr("id")==="bzh10"){
+          $(this).addClass("map-selected");
+          $(".info-list").empty(); 
+          map.removeLayer(bzh04Layer);
+          map.removeLayer(bzh07Layer);
+          map.removeLayer(bzh10Layer);
+          map.removeLayer(layer);
+          map.infoWindow.hide();
+          map.addLayer(bzh10Layer);
+          $("#layerList04").css("display","none");
+          $("#layerList07").css("display","none");
+          $("#layerList10").css("display","block");
+          var layerList10 = new LayerList({
+            map: map,    
+            showSubLayers: false    
+          },"layerList10");
+          layerList10.startup();
+        }
+      })
+
+      layer = new GraphicsLayer({id:"layer"});
+
+      $("#clearbtn").click(function(){
+        layer.clear();
+        map.infoWindow.hide();
+      })
+      
+      southCarolinaCounties = new ArcGISDynamicMapServiceLayer("http://58.62.200.71:8399/arcgis/rest/services/QY/MapServer");
+
+        $.ajax({
+            type:"get",
+            url:"http://58.62.200.71:8399/arcgis/rest/services/QY/MapServer/0/query?text=%25&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=true&outSR=&outFields=*&f=pjson",
+            dataType:"jsonp",
+            success:function(data){               
+                var centerdata = data.features;
+                $("input[name='areaname']").click(function(){
+                  var layerDefinitions = [];
+                  layerDefinitions[0] = "NAME = '"+$(this).attr("value")+"'";
+                  southCarolinaCounties.setLayerDefinitions(layerDefinitions);
+                  map.addLayer(southCarolinaCounties);
+                  for(var i=0;i<centerdata.length;i++){
+                    if($(this).attr("value")===centerdata[i].attributes.NAME){
+                      /*var cPoint = new Point();
+                      cPoint.x = centerdata[i].attributes.X;
+                      cPoint.y = centerdata[i].attributes.Y;
+                      cPoint.setSpatialReference(new SpatialReference({ wkid:2383 }));
+                      map.centerAndZoom(cPoint,1);*/
+                      var polygon = new Polygon(centerdata[i].geometry);
+                      polygon.setSpatialReference(new SpatialReference({ wkid:2383 }));
+                      var cp=polygon.getCentroid();
+                      map.centerAndZoom(cp,1);
+                    }
+                  }
+                })
+            },
+            error:function(){
+                alert("error");
+            }
+        })
+});
+  
+</script>
+</head>
+<body>
+<div class="container" data-dojo-type="dijit/layout/BorderContainer" 
+data-dojo-props="design:'headline',gutters:false">
+    <div class="leftDiv">
+        <dl class="leftmenu">           
+        <dd>
+        <div class="title">
+        <span><img src="images/leftico01.png" /></span>图层控制
+        </div>
+            <ul class="menuson">            
+                <li><div id="layerList04"></div>
+                <div id="layerList07" style="display: none;"></div>
+                <div id="layerList10" style="display: none;"></div></li>
+            </ul>
+        </dd>       
+        <dd>
+        <div class="title">
+        <span><img src="images/leftico02.png" /></span>专题信息
+        </div>
+        <ul class="menuson">
+            <li>
+            <div id="areaSelected" class="areaSelected">广州市</div>
+            <table id="areaChoose" class="areaChoose">
+                <tr>
+                    <td>
+                        <input type="radio" name="areaname" id="ch" value="从化区">从化区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="zc" value="增城区">增城区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="ns" value="南沙区">南沙区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="py" value="番禺区">番禺区</input>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="areaname" id="by" value="白云区">白云区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="hd" value="花都区">花都区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="hp" value="黄埔区">黄埔区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="th" value="天河区">天河区</input>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="radio" name="areaname" id="lw" value="荔湾区">荔湾区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="hz" value="海珠区">海珠区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="yx" value="越秀区">越秀区</input>
+                    </td>
+                    <td>
+                        <input type="radio" name="areaname" id="lg" value="萝岗区">萝岗区</input>
+                    </td>
+                </tr>
+            </table>
+            <table class="disnone" id="chTown">
+                <tr>
+                    <td><input type="radio" name="chTname">城郊街道</input></td>
+                    <td><input type="radio" name="chTname">鳌头镇</input></td>
+                    <td><input type="radio" name="chTname">太平镇</input></td>
+                    <td><input type="radio" name="chTname">吕田镇</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="chTname">良口镇</input></td>
+                    <td><input type="radio" name="chTname">街口街道</input></td>
+                    <td><input type="radio" name="chTname">江埔街道</input></td>
+                    <td><input type="radio" name="chTname">温泉镇</input></td>
+                </tr>
+            </table>
+            <table class="disnone" id="zcTown">
+                <tr>
+                    <td><input type="radio" name="zcTname">中新镇</input></td>
+                    <td><input type="radio" name="zcTname">正果镇</input></td>
+                    <td><input type="radio" name="zcTname">派潭镇</input></td>
+                    <td><input type="radio" name="zcTname">荔城街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="zcTname">朱村街道</input></td>
+                    <td><input type="radio" name="zcTname">小楼镇</input></td>
+                    <td><input type="radio" name="zcTname">石滩镇</input></td>
+                    <td><input type="radio" name="zcTname">新塘镇</input></td>
+                </tr>
+            </table>
+            <table class="disnone" id="nsTown">
+                <tr>
+                    <td><input type="radio" name="nsTname">南沙街道</input></td>
+                    <td><input type="radio" name="nsTname">万顷沙镇</input></td>
+                    <td><input type="radio" name="nsTname">横沥镇</input></td>
+                    <td><input type="radio" name="nsTname">黄阁镇</input></td>
+                </tr>
+            </table>
+            <table class="disnone" id="pyTown">
+                <tr>
+                    <td><input type="radio" name="pyTname">大龙街道</input></td>
+                    <td><input type="radio" name="pyTname">洛浦街道</input></td>
+                    <td><input type="radio" name="pyTname">石基镇</input></td>
+                    <td><input type="radio" name="pyTname">小谷围街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="pyTname">南村镇</input></td>
+                    <td><input type="radio" name="pyTname">大石街道</input></td>
+                    <td><input type="radio" name="pyTname">石壁街道</input></td>
+                    <td><input type="radio" name="pyTname">钟村街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="pyTname">新造镇</input></td>
+                    <td><input type="radio" name="pyTname">东环街道</input></td>
+                    <td><input type="radio" name="pyTname">桥南街道</input></td>
+                    <td><input type="radio" name="pyTname">石楼镇</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="pyTname">沙头街道</input></td>
+                    <td><input type="radio" name="pyTname">市桥街道</input></td>
+                    <td><input type="radio" name="pyTname">沙湾镇</input></td>
+                    <td><input type="radio" name="pyTname">东涌镇</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="pyTname">榄核镇</input></td>
+                    <td><input type="radio" name="pyTname">大岗镇</input></td>
+                    <td><input type="radio" name="pyTname">化龙镇</input></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="disnone" id="byTown">
+                <tr>
+                    <td><input type="radio" name="byTname">江高镇</input></td>
+                    <td><input type="radio" name="byTname">永平街道</input></td>
+                    <td><input type="radio" name="byTname">太和镇</input></td>
+                    <td><input type="radio" name="byTname">石井街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="byTname">钟落潭镇</input></td>
+                    <td><input type="radio" name="byTname">金沙街道</input></td>
+                    <td><input type="radio" name="byTname">松洲街道</input></td>
+                    <td><input type="radio" name="byTname">同和街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="byTname">人和镇</input></td>
+                    <td><input type="radio" name="byTname">棠景街道</input></td>
+                    <td><input type="radio" name="byTname">三元里街道</input></td>
+                    <td><input type="radio" name="byTname">同德街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="byTname">均禾街道</input></td>
+                    <td><input type="radio" name="byTname">景泰街道</input></td>
+                    <td><input type="radio" name="byTname">京溪街道</input></td>
+                    <td><input type="radio" name="byTname">嘉禾街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="byTname">新市街道</input></td>
+                    <td><input type="radio" name="byTname">黄石街道</input></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="disnone" id="hdTown">
+                <tr>
+                    <td><input type="radio" name="hdTname">炭步镇</input></td>
+                    <td><input type="radio" name="hdTname">赤坭镇</input></td>
+                    <td><input type="radio" name="hdTname">花山镇</input></td>
+                    <td><input type="radio" name="hdTname">狮岭镇</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hdTname">梯面镇</input></td>
+                    <td><input type="radio" name="hdTname">新华镇</input></td>
+                    <td><input type="radio" name="hdTname">芙蓉镇</input></td>
+                    <td><input type="radio" name="hdTname">花东镇</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hdTname">雅瑶镇</input></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="disnone" id="hpTown">
+                <tr>
+                    <td><input type="radio" name="hpTname">穗东街道</input></td>
+                    <td><input type="radio" name="hpTname">大沙街道</input></td>
+                    <td><input type="radio" name="hpTname">珠吉街道</input></td>
+                    <td><input type="radio" name="hpTname">文冲街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hpTname">南岗街道</input></td>
+                    <td><input type="radio" name="hpTname">鱼珠街道</input></td>
+                    <td><input type="radio" name="hpTname">黄埔街道</input></td>
+                    <td><input type="radio" name="hpTname">红山街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hpTname">东区街道</input></td>
+                    <td><input type="radio" name="hpTname">长洲镇街道</input></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="disnone" id="thTown">
+                <tr>
+                    <td><input type="radio" name="tnTname">前进街道</input></td>
+                    <td><input type="radio" name="tnTname">员村街道</input></td>
+                    <td><input type="radio" name="tnTname">沙河街道</input></td>
+                    <td><input type="radio" name="tnTname">天园街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="tnTname">长兴街道</input></td>
+                    <td><input type="radio" name="tnTname">新塘街道</input></td>
+                    <td><input type="radio" name="tnTname">车陂街道</input></td>
+                    <td><input type="radio" name="tnTname">棠下街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="tnTname">石牌街道</input></td>
+                    <td><input type="radio" name="tnTname">五山街道</input></td>
+                    <td><input type="radio" name="tnTname">黄村街道</input></td>
+                    <td><input type="radio" name="tnTname">冼村街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="tnTname">猎德街道</input></td>
+                    <td><input type="radio" name="tnTname">天河南街道</input></td>
+                    <td><input type="radio" name="tnTname">林和街道</input></td>
+                    <td><input type="radio" name="tnTname">沙东街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="tnTname">凤凰街道</input></td>
+                    <td><input type="radio" name="tnTname">龙洞街道</input></td>
+                    <td><input type="radio" name="tnTname">元岗街道</input></td>
+                    <td><input type="radio" name="tnTname">兴华街道</input></td>
+                </tr>
+            </table>
+            <table class="disnone" id="lwTown">
+                <tr>
+                    <td><input type="radio" name="lwTname">逢源街道</input></td>
+                    <td><input type="radio" name="lwTname">冲口街道</input></td>
+                    <td><input type="radio" name="lwTname">花地街道</input></td>
+                    <td><input type="radio" name="lwTname">石围塘街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="lwTname">昌华街道</input></td>
+                    <td><input type="radio" name="lwTname">龙津街道</input></td>
+                    <td><input type="radio" name="lwTname">南源街道</input></td>
+                    <td><input type="radio" name="lwTname">彩虹街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="lwTname">金花街道</input></td>
+                    <td><input type="radio" name="lwTname">西村街道</input></td>
+                    <td><input type="radio" name="lwTname">海龙街道</input></td>
+                    <td><input type="radio" name="lwTname">中南街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="lwTname">东沙街道</input></td>
+                    <td><input type="radio" name="lwTname">沙面街道</input></td>
+                    <td><input type="radio" name="lwTname">岭南街道</input></td>
+                    <td><input type="radio" name="lwTname">多宝街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="lwTname">华林街道</input></td>
+                    <td><input type="radio" name="lwTname">站前街道</input></td>
+                    <td><input type="radio" name="lwTname">白鹤洞街道</input></td>
+                    <td><input type="radio" name="lwTname">桥中街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="lwTname">东教街道</input></td>
+                    <td><input type="radio" name="lwTname">茶窖街道</input></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="disnone" id="hzTown">
+                <tr>
+                    <td><input type="radio" name="hzTname">琶洲街道</input></td>
+                    <td><input type="radio" name="hzTname">新港街道</input></td>
+                    <td><input type="radio" name="hzTname">赤岗街道</input></td>
+                    <td><input type="radio" name="hzTname">沙园街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hzTname">瑞宝街道</input></td>
+                    <td><input type="radio" name="hzTname">南洲街道</input></td>
+                    <td><input type="radio" name="hzTname">昌岗街道</input></td>
+                    <td><input type="radio" name="hzTname">南石头街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hzTname">华洲街道</input></td>
+                    <td><input type="radio" name="hzTname">江海街道</input></td>
+                    <td><input type="radio" name="hzTname">南华西街道</input></td>
+                    <td><input type="radio" name="hzTname">官洲街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hzTname">素社街道</input></td>
+                    <td><input type="radio" name="hzTname">江南中街道</input></td>
+                    <td><input type="radio" name="hzTname">海幢街道</input></td>
+                    <td><input type="radio" name="hzTname">滨江街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="hzTname">龙凤街道</input></td>
+                    <td><input type="radio" name="hzTname">凤阳街道</input></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="disnone" id="yxTown">
+                <tr>
+                    <td><input type="radio" name="yxTname">梅花村街道</input></td>
+                    <td><input type="radio" name="yxTname">人民街道</input></td>
+                    <td><input type="radio" name="yxTname">珠光街道</input></td>
+                    <td><input type="radio" name="yxTname">大新街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="yxTname">诗书街道</input></td>
+                    <td><input type="radio" name="yxTname">光塔街道</input></td>
+                    <td><input type="radio" name="yxTname">大塘街道</input></td>
+                    <td><input type="radio" name="yxTname">北京街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="yxTname">东风街道</input></td>
+                    <td><input type="radio" name="yxTname">六榕街道</input></td>
+                    <td><input type="radio" name="yxTname">广卫街道</input></td>
+                    <td><input type="radio" name="yxTname">洪桥街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="yxTname">流花街道</input></td>
+                    <td><input type="radio" name="yxTname">登峰街道</input></td>
+                    <td><input type="radio" name="yxTname">白云街道</input></td>
+                    <td><input type="radio" name="yxTname">东湖街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="yxTname">农林街道</input></td>
+                    <td><input type="radio" name="yxTname">大东街道</input></td>
+                    <td><input type="radio" name="yxTname">建设街道</input></td>
+                    <td><input type="radio" name="yxTname">矿泉街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="yxTname">华乐街道</input></td>
+                    <td><input type="radio" name="yxTname">黄花岗街道</input></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <table class="disnone" id="lgTown">
+                <tr>
+                    <td><input type="radio" name="lgTname">永和街道</input></td>
+                    <td><input type="radio" name="lgTname">九龙镇</input></td>
+                    <td><input type="radio" name="lgTname">萝岗街道</input></td>
+                    <td><input type="radio" name="lgTname">联和街道</input></td>
+                </tr>
+                <tr>
+                    <td><input type="radio" name="lgTname">夏港街道</input></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+            <div id="infosearch">信息查询<label style="font-weight: bold;">(共<label id="totalListLength" style="color: red;font-weight: bold;"></label>条记录)</label></div>
+                <ul class="info-type-and-search">
+                    <!-- <li>
+                        <input type="radio" name="typename" checked="checked" id="alltype" value="全部">全部</input>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="typename" id="ltqy" value="龙头企业">龙头企业</input>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="typename" id="sfq" value="示范区">示范区</input>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="typename" id="scjd" value="蔬菜基地">蔬菜基地</input>
+                    </li> -->
+                    <li>
+                        <input type="text" style="width: 40%;height: 20px;" id="searchtext"></input>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="button" value="搜索" style="width: 15%;height: 25px;" id="searchbtn"></input>
+                        <input type="button" value="清除定位" style="width: 20%;height: 25px;" id="clearbtn"></input>
+                    </li>
+                    <li></li>
+                </ul>
+                
+                <ul class="info-list">
+                </ul>
+                <div id="demo4"></div>
+            </li>
+            </ul>     
+        </dd>        
+        </dl>
+    </div>
+    <div class="rightDiv">
+        <div id="map" data-dojo-type="dijit/layout/ContentPane" data-dojo-props="region:'center'" class="tundra"></div>
+        <div id="app-right-top">
+            <div id="tool-container">
+                <div class="tool-control-wrap">
+                    <div class="left float-l">
+                        <!-- <div class="remoteimage">
+                            <span id="remoteimage_control" class="last"><img src="images/icon/layer.png"></span>
+                            <i>遥感影像</i>
+                        </div>
+                        <b></b> -->
+                        <div class="bzh04 map-selected mapChoose" id="bzh04">
+                            <span id="bzh04_control" class="last"><img src="images/icon/layer.png"></span>
+                            <i>标准化农田2004</i>
+                        </div>
+                        <b></b>
+                        <div class="bzh07 mapChoose" id="bzh07">
+                            <span id="bzh07_control" class="last"><img src="images/icon/layer.png"></span>
+                            <i>标准化农田2007</i>
+                        </div>
+                        <b></b>
+                        <div class="bzh10 mapChoose" id="bzh10">
+                            <span id="bzh10_control" class="last"><img src="images/icon/layer.png"></span>
+                            <i>标准化农田2010</i>
+                        </div>
+                        <b></b>
+                        <div class="statement">
+                            <span id="statement_control" class="last"><img src="images/icon/tongji.png"></span>
+                            <i>统计报表</i>
+                        </div>
+                        <b></b>
+                        <div class="legend">
+                            <span id="legend_control" class="last"><img src="images/icon/legendicon.png"></span>
+                            <i>图例</i>
+                        </div>
+                        <b></b>
+                        <!-- <div class="fullscr">
+                            <span id="fullscr_control" class="last"><img src="images/icon/menu.png"></span>
+                            <i>全屏</i>
+                        </div>
+                        <b></b> -->
+                        <div class="basictool">
+                            <span id="basictool_control" class="last"><img src="images/icon/menu.png"></span>
+                            <i>工具</i>
+                            <em></em>
+                        </div>
+                        <div class="detail-box">
+                        <ul id="boxul" class="boxinfo">
+                            <li id="zoomin">
+                                <span class="last"><img src="images/icon/zoomin.png"></span>
+                                <i>拉框放大</i>
+                            </li>
+                            <li id="zoomout">
+                               <span class="last"><img src="images/icon/zoomout.png"></span>
+                               <i >拉框缩小</i>
+                            </li>
+                            <li id="zoomprev">
+                               <span class="last"><img src="images/icon/previous.png"></span>
+                               <i>前一视图</i>
+                            </li>
+                            <li id="zoomnext">
+                               <span class="last"><img src="images/icon/next.png"></span>
+                               <i>后一视图</i>
+                            </li>
+                            <li id="pan" class="map-short">
+                               <span class="last"><img src="images/icon/pan.png"></span>
+                               <i>平移</i>
+                            </li>
+                            <li id="extent" class="map-short">
+                               <span class="last"><img src="images/icon/earth.png"></span>
+                               <i>全图</i>
+                            </li>
+                            <li id="printmap" class="map-short">
+                               <span class="last"><img src="images/icon/print.png"></span>
+                               <i>打印</i>
+                            </li>
+                            <li id="deactivate" class="map-short">
+                               <span class="last"><img src="images/icon/close.png"></span>
+                               <i>取消</i>
+                            </li> 
+                             
+                        </ul>
+                    </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="app-left-bottom">
+            <div id="legend-container">
+                <div class="legend-control-wrap">
+                    <div class="legend-left float-l">
+                        <img src="images/legend/Bzhnt_Legend.png">
+                    </div>
+                </div>
+            </div>
+        </div>        
+    </div>
+    </div>
+    <script type="text/javascript">
+     
+        $("input[name='areaname']").click(function(){
+            $("#areaChoose").attr("class","disnone");
+            var areaText = $(this).attr("value");
+            $("#areaSelected").html('<a id="gbA" href="javascript:gobackArea()">广州市</a>--><a href="javascript:selArea()">'+areaText+'</a>');
+            var townTb = $(this).attr('id')+'Town';
+            $("table[id="+townTb+"]").removeClass("disnone");
+        })
+
+        function gobackArea(){
+            $("table[id$='Town']").attr("class","disnone");
+            $("#areaChoose").removeClass("disnone");
+            $("#areaSelected").html('广州市');
+            $("input[name='areaname']").removeAttr("checked");
+
+
+            require([
+            "esri/geometry/Point",
+            "esri/SpatialReference",
+            "esri/map"
+            ],function(
+                Point,
+                SpatialReference,
+                Map){
+                    var cPoint = new Point();
+                    cPoint.x = 445646.522;
+                    cPoint.y = 2581585.398;
+                    cPoint.setSpatialReference(new SpatialReference({ wkid:2383 }));
+                    map.centerAndZoom(cPoint,0);
+                    map.removeLayer(southCarolinaCounties);
+
+        }) 
+
+        }
+
+        function selArea(){
+            $("input[name$='Tname']").removeAttr("checked");
+        }
+        
+        $('div[class="basictool"]').click(function(){
+            $('div[class="detail-box"]').toggle("fast",function(){
+                if($('div[class="detail-box"]').is(":hidden")){
+                    $('div[class="basictool"] em').css("background-position","-13px -17px");
+                    $('div[class="basictool"] i').removeClass("basictool-i-selected");
+               }
+               else{
+                    $('div[class="basictool"] em').css("background-position","-12px -177px");
+                    $('div[class="basictool"] i').addClass("basictool-i-selected");
+               }  
+              });               
+        })
+       
+        $("div[class='statement']").click(function(){
+            window.open('statement.jsp','_blank');
+        })
+        function showDetail(){
+            window.open("page.html");
+        }
+        $("div[class='legend']").click(function(){
+            $("#app-left-bottom").toggle("fast",function(){
+                if($("#app-left-bottom").is(":hidden")){
+                    $("div[class='legend'] i").css("font-weight","normal");
+                    $("div[class='legend'] i").css("color","#000");
+                }
+                else{
+                    $("div[class='legend'] i").css("font-weight","bold");
+                    $("div[class='legend'] i").css("color","#84B990");
+                }
+            });
+        })
+
+
+        
+    </script>
+    <script>
+  var navToolbar;
+  var navOption; // 当前选择的操作
+  require([
+      "dojo/parser",
+      "esri/toolbars/navigation",
+      "dojo/domReady!"],
+    function (
+      parser,
+      Navigation
+    ) {
+      parser.parse();
+
+      //地图基本操作功能（放大 缩小 全图 前一视图 后一视图 漫游 返回标准设置）
+      map.on('load', setupNavBar);
+      function setupNavBar(){
+        navToolbar = new Navigation(map);
+      }      
+      $("div[class='detail-box'] li").click(function(){
+        $("div[class='detail-box'] li").css("font-weight","normal");
+        $("div[class='detail-box'] li").css("background-color","#fff");
+        switch ($(this).attr("id")){
+            case 'zoomin':
+                navToolbar.activate(Navigation.ZOOM_IN);                
+                $(this).css("background-color","#cccccc");
+                $(this).css("font-weight","bold");
+                break;
+            case 'zoomout':
+                navToolbar.activate(Navigation.ZOOM_OUT);
+                $(this).css("background-color","#cccccc");
+                $(this).css("font-weight","bold");
+                break;
+            case 'zoomprev':
+                navToolbar.zoomToPrevExtent();
+                break;
+            case 'zoomnext':
+                navToolbar.zoomToNextExtent();
+                break;
+            case 'pan':
+                map.enablePan();
+                navToolbar.activate(Navigation.PAN);
+                $(this).css("background-color","#cccccc");
+                $(this).css("font-weight","bold");
+                break;
+            case 'extent':
+                navToolbar.zoomToFullExtent();
+                break;
+            case 'deactivate':
+                navToolbar.deactivate();
+                break;
+            case 'printmap':
+                $("#map").jqprint();
+                break;
+        }
+      }) 
+    });
+</script>
+<script type="text/javascript">
+    $(function(){
+      var listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9004/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
+      getListAjax();
+      $(".mapChoose").click(function(){
+        if($(this).attr("id")==="bzh04"){
+          $(".info-list").empty();
+          $("#demo4").empty();
+          $("#totalListLength").empty();
+          listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9004/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
+          getListAjax();
+        }
+        else if($(this).attr("id")==="bzh07"){
+          $(".info-list").empty();
+          $("#demo4").empty();
+          $("#totalListLength").empty();
+          listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9007/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
+          getListAjax();
+        }
+        else if($(this).attr("id")==="bzh10"){
+          $(".info-list").empty();
+          $("#demo4").empty();
+          $("#totalListLength").empty();
+          listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9010/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
+          getListAjax();
+        }
+      })
+
+      function getListAjax(){
+        $.ajax({
+            type:"get",
+            url:listUrl,
+            dataType:"jsonp",
+            success:function(data){
+
+                var datalist = data.features;
+                var newlist =new Array();
+                //初始化
+                for(var i=0;i<datalist.length;i++){
+                    var curFeature = datalist[i];
+                    //if (curFeature.attributes.项目名称!=" ") {
+                      newlist.push(datalist[i]);
+                    //}
+                }
+                startPage();
+               
+                $("#searchbtn").click(function(){
+                    var keyword = $("#searchtext").val();
+                    $(".info-list").empty();
+                    newlist=[];  
+                      for(var i=0;i<datalist.length;i++){
+                        var curFeature = datalist[i];
+                        var t = curFeature.attributes.项目名称.indexOf(keyword);
+                        if(t>=0){
+                        
+                          newlist.push(datalist[i]);
+                        
+                        }
+                      }
+                      startPage();
+                }) 
+
+                function startPage(){
+                  $("#totalListLength").empty();
+                  var totalListLength = newlist.length;
+                 var eachPage = 8;
+                  $("#totalListLength").append(totalListLength);
+                  if(newlist.length>eachPage){
+                    
+                    for(var k=0;k<eachPage;k++){
+                      var curFeature = newlist[k];
+                      var str = JSON.stringify(curFeature.geometry);    
+                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                      $(".info-list").append($html);
+
+                    }
+                    
+                    var totalPage = newlist.length%eachPage==0?newlist.length/eachPage:parseInt(newlist.length/eachPage)+1;
+                    
+                    $("#demo4").paginate({
+                      count     : totalPage,
+                      start     : 1,
+                      display     : 6,
+                      border          : false,
+                      text_color              : '#68BA64',
+                      background_color        : '#E3F2E1',    
+                      border_hover_color      : '#68BA64',
+                      text_hover_color        : 'black',
+                      background_hover_color  : '#CAE6C6', 
+                      images    : false,
+                      mouse   : 'press',
+                      onChange: function(page){
+                                  $(".info-list").empty();                     
+                                  var currentPage= $(".jPag-current").text();
+                                  for(var j=0;j<newlist.length;j++){
+                                    var curFeature = newlist[j];
+                                    if(j>=(currentPage-1)*eachPage &&j<=(currentPage*eachPage)-1){
+                                      var str = JSON.stringify(curFeature.geometry);
+                                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                                        $(".info-list").append($html);
+                                    }
+                                  }        
+
+                      }
+                    });
+                  }
+                  else{
+                    for(var k=0;k<newlist.length;k++){
+                      var curFeature = newlist[k];
+                      var str = JSON.stringify(curFeature.geometry);
+                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                      $(".info-list").append($html);
+
+                    }
+                    $("#demo4").paginate({
+                      count     : 1,
+                      start     : 1,
+                      display     : 6,
+                      border          : false,
+                      text_color              : '#68BA64',
+                      background_color        : '#E3F2E1',    
+                      border_hover_color      : '#68BA64',
+                      text_hover_color        : 'black',
+                      background_hover_color  : '#CAE6C6', 
+                      images    : false,
+                      mouse   : 'press',
+                      onChange: function(page){
+                                  $(".info-list").empty();                                  
+                                  var currentPage= $(".jPag-current").text();
+                                  for(var j=0;j<newlist.length;j++){
+                                    var curFeature = newlist[j];
+                                    if(j>=(currentPage-1)*eachPage &&j<=(currentPage*eachPage)-1){
+                                      var str = JSON.stringify(curFeature.geometry);
+                                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                                        $(".info-list").append($html);
+                                    }
+                                  }        
+
+                      }
+                    });
+                  }
+                  
+                }               
+            },
+            error:function(){
+                alert("error");
+            }
+        })
+      }
+      
+
+        
+    })
+    function positionFeature(ring,name,district,content){
+      
+        require([
+            "esri/geometry/Point",
+            "esri/SpatialReference",
+            "esri/InfoTemplate",
+            "esri/dijit/Popup",
+            "esri/dijit/PopupTemplate",
+            "esri/symbols/SimpleMarkerSymbol",
+            "esri/Color",
+            "esri/graphic",
+            "esri/layers/GraphicsLayer",
+            "esri/symbols/PictureMarkerSymbol",
+            "esri/symbols/SimpleLineSymbol",
+            "esri/geometry/Polygon",
+            "esri/symbols/SimpleFillSymbol",
+            "esri/dijit/InfoWindow"],function(
+                Point,
+                SpatialReference,
+                InfoTemplate,
+                Popup,
+                PopupTemplate,
+                SimpleMarkerSymbol,
+                Color,
+                Graphic,
+                GraphicsLayer,
+                PictureMarkerSymbol,
+                SimpleLineSymbol,
+                Polygon,
+                SimpleFillSymbol,
+                InfoWindow){                   
+                    layer.clear();
+                    //alert(ring);
+                    var polygon = new Polygon(ring);
+                    polygon.setSpatialReference(new SpatialReference({ wkid:2383 }));
+                    var cp=polygon.getCentroid();
+                    //alert(cp.y);
+                    //polygon.addRing(ring);
+                    var sfs = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,new Color([0,0,0]), 2),new Color([255,255,0,0.25]));
+                    var gg = new Graphic(polygon,sfs);
+                    layer.add(gg);
+                    map.addLayer(layer);
+                    
+                    map.infoWindow.setTitle(name);
+                    map.infoWindow.setContent("<table class='infoPopup'><tr><td class='td1'>项目名称：</td><td><a href='javascript:showDetail()'>"+name+"</a></td></tr><tr><td class='td1'>所在区：</td><td>"+district+"</td></tr><tr><td class='td1'>项目情况：</td><td>"+content+"</td></tr></table>");
+                    map.infoWindow.show(cp,InfoWindow.ANCHOR_UPPERRIGHT);
+                    map.centerAndZoom(cp,4);
+
+        }) 
+    }
+
+
+</script>
+</body>
+</html>

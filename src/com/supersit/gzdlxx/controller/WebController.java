@@ -23,8 +23,8 @@ import com.supersit.gzdlxx.util.StringUtil;
 @Controller
 @RequestMapping(value = "/web")
 public class WebController {
-    @Autowired
-    private MemberService memberService;
+   @Autowired
+   private MemberService memberService;
    private Logger logger=Logger.getLogger(getClass());
     /**
      * 注册会员

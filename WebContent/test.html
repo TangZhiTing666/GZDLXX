@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title>Custom Info Window</title>
+    <link rel="stylesheet" href="http://58.62.200.92/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/esri/css/esri.css">
+    <style>
+      html, body, #mapDiv { height: 100%; width: 100%; margin: 0; padding: 0; }
+
+    </style>
+
+    <script src="http://58.62.200.92/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/init.js"></script>
+    <script>
+
+    require([
+      "dojo/dom",
+      "dojo/dom-construct",
+      "esri/map",      
+      "esri/layers/ArcGISTiledMapServiceLayer",
+      "esri/layers/ArcGISDynamicMapServiceLayer",
+      "dojo/domReady!"
+    ], function(
+       dom,
+       ArcGISTiledMapServiceLayer,
+       ArcGISDynamicMapServiceLayer,
+       domConstruct,
+       Map,
+       InfoWindow
+       
+    ) {
+      
+      var map = new Map("mapDiv");
+
+      var baseMapLayer = new ArcGISDynamicMapServiceLayer("http://58.62.200.71:8399/arcgis/rest/services/gznjztbase/MapServer");
+      map.addLayer(baseMapLayer);
+
+      var demographicsLayer = new ArcGISDynamicMapServiceLayer("http://192.168.2.19:8399/arcgis/rest/services/gznjztchar/MapServer");
+
+      map.addLayer(demographicsLayer);
+    });
+    </script>
+  </head>
+  <body>
+    <div id="mapDiv"></div>
+  </body>
+</html>

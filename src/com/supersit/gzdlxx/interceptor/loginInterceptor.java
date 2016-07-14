@@ -58,9 +58,11 @@ public class loginInterceptor implements HandlerInterceptor{
         HttpSession session = request.getSession();
         System.out.println("-------------------------------------------"+session.getAttribute("memberLogin"));
         if (session.getAttribute("memberLogin") == null) { 
-        	response.getWriter().print(Constant.CHARACTER_ENCODING);
+        	//response.getWriter().print(Constant.CHARACTER_ENCODING);
+        	//response.setCharacterEncoding("UTF-8");
+        	response.setContentType("text/html;charset=UTF-8"); 
         	response.getWriter().print("<script>alert('请重新登录')</script>");
-        	response.getWriter().print("<script>parent.location='/GZDLXX/toLogin.do'</script>");
+        	response.getWriter().print("<script>parent.location='/GZDLXX/login.do'</script>");
 //        	request.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(request, response);
         	return false; 
         } else { 

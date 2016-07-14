@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--parameterType=入参   resultType=返回类型-->
+<mapper namespace="com.supersit.gzdlxx.dao.LoginUserDao">
+	<!-- 用户登录查询 -->
+	<!--  
+	<resultMap type="com.supersit.gzdlxx.pojo.UsersItem" id="loginMapping">
+		<result column="unit_id" property="unitId"/>
+	</resultMap>
+	-->
+	<select id="selectUser" parameterType="java.lang.String" resultType="com.supersit.gzdlxx.pojo.UsersItem">
+		select id,account,username,status,password as userPwd,pctoken,ydtoken from UM_USER where account=#{username}
+	</select>
+	<!-- 缓存配置 -->
+	<!--  
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
+	<select id="searchbymobile" parameterType="java.lang.String" resultType="com.supersit.gzdlxx.pojo.MemberItem">
+		select * from member where mobile=#{mobile} and isdelete=1
+	</select>
+	-->
+	<update id="updatepassword" parameterType="java.lang.String">
+	 	update member set password=#{password} where id=#{mobile}
+	</update>
+	
+</mapper>
