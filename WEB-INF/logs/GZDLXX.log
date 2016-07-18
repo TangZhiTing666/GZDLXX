@@ -1,0 +1,26 @@
+DEBUG 2016-07-14 10:22:58,393 [text.Test_logger]-[main] : 测试日志记录
+ DEBUG 2016-07-14 10:24:59,669 [text.Test_logger]-[main] : 测试日志记录
+ DEBUG 2016-07-14 10:34:41,851 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:36:30,178 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:36:30,181 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:43:40,136 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:43:40,138 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:49:22,695 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:49:22,695 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:51:33,941 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:51:33,941 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:54:13,599 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:54:13,599 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:54:34,771 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:54:34,771 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:55:07,631 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:55:07,631 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:55:15,964 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:55:15,980 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:55:18,819 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:55:18,819 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 10:55:20,629 [text.Test_logger]-[main] : 测试日志记录01
+ DEBUG 2016-07-14 10:55:20,629 [text.Test_logger]-[main] : 测试日志记录
+ INFO 2016-07-14 11:00:54,790 [text.Test_logger]-[main] : 测试日志记录01
+ INFO 2016-07-14 11:02:27,611 [text.Test_logger]-[main] : 测试日志记录01
+ 

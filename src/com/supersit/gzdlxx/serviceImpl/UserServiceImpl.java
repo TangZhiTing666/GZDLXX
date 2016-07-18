@@ -1,6 +1,6 @@
 package com.supersit.gzdlxx.serviceImpl;
 
-import java.util.Map;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.supersit.gzdlxx.common.MD5;
 import com.supersit.gzdlxx.dao.LoginUserDao;
+import com.supersit.gzdlxx.pojo.Jurisdiction;
 import com.supersit.gzdlxx.pojo.ResultItem;
 import com.supersit.gzdlxx.pojo.UsersItem;
 import com.supersit.gzdlxx.service.UserService;
@@ -33,9 +34,17 @@ public class UserServiceImpl implements UserService {
 						message="登陆成功";
 						pages ="choose";
 						//密码正确后查询权限
-						Map map=logindao.getJurisdiction(usersitem.getId());
+						List<Jurisdiction> list=logindao.getJurisdiction(usersitem.getId());
+						//System.out.println("list.size=="+list.size());
+						usersitem.setList(list);
+						//添加token
+						double number=Math.random()*10000000;
+						System.out.println(number);
+						logindao.updatePcToken(usersitem.getId(),(""+number));
+						usersitem.setPcToken(""+number);
 						resultitem.getSuccessInfo(message, usersitem, pages);
 					}else{
+						
 						flog=3;
 						message="密码不正确";
 						pages ="login";

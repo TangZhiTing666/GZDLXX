@@ -63,10 +63,16 @@ public class HomeController {
 				session.setAttribute("gzdl_name",usersitem.getUserName());//建立session用户名
 				session.setAttribute("gzdl_user",usersitem);//建立session用户对象
 				session.setMaxInactiveInterval(30*60);	
-				//System.out.println(session.getAttribute("gzdl_name"));
+				
     		}
     		logger.info(resultitem.getMsg()+":"+account);
     		model.addAttribute("resultitem",resultitem);
+    		//model.addAttribute("usersitem",usersitem);
+    		//model.addAttribute("list",usersitem.getList());
+    		/*for(int i=0;i<usersitem.getList().size();i++){
+    			System.out.println(usersitem.getList().get(i).getQxName());
+    		}*/
+    		//System.out.println(resultitem.getResultdata());
 		} catch (Exception e) {
 			// TODO: handle exception
 			logger.debug("登录异常");

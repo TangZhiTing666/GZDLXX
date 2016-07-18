@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<!--parameterType=入参   resultType=返回类型-->
+<!--parameterType=入参 类型(可省略)  resultType=返回类型-->
 <mapper namespace="com.supersit.gzdlxx.dao.LoginUserDao">
 	<!-- 用户登录查询 -->
 	<!--  
@@ -11,6 +11,7 @@
 	<select id="selectUser" parameterType="java.lang.String" resultType="com.supersit.gzdlxx.pojo.UsersItem">
 		select id,account,username,status,password as userPwd,pctoken,ydtoken from UM_USER where account=#{username}
 	</select>
+	
 	<!-- 缓存配置 -->
 	<!--  
 	<cache type="org.mybatis.caches.ehcache.LoggingEhcache"/>
@@ -18,8 +19,34 @@
 		select * from member where mobile=#{mobile} and isdelete=1
 	</select>
 	-->
-	<update id="updatepassword" parameterType="java.lang.String">
-	 	update member set password=#{password} where id=#{mobile}
+	<!-- 用户权限查询 -->
+	<resultMap type="com.supersit.gzdlxx.pojo.Jurisdiction" id="qxMapping">
+		<result column="id" property="id"/>
+		<result column="name" property="qxName"/>
+		<result column="parent_id" property="parentid"/>
+	</resultMap>
+	<select id="getJurisdiction" resultMap="qxMapping">
+		select id,name,parent_id  from (
+		 select g.* from mf_column_info g where g.id in (
+		  select f.MFCOLUMNID from um_group2mfcolumn f where f.GROUP_ID in(
+		   select e.ID from um_group e where e.id in (
+		    select d.group_id from um_user2group d	where d.USER_ID=#{id}
+		)))) order by parent_id asc
+	</select>
+	<!-- 修改pctoken -->
+	<update id="updatePcToken" >
+	 	update um_user set pctoken=#{number} where id=#{id}
 	</update>
-	
+	<!-- 修改ydtoken -->
+	<update id="updateYdToken" >
+	 	update um_user set ydtoken=#{number} where id=#{id}
+	</update>
+	<!-- 查询token-->
+	<select id="seleteToken" resultType="java.lang.String">
+		select #{token} from um_user where id =#{id}
+	</select> 
+	<!-- 用户锁定 -->
+	<update id="updateStatus" >
+	 	update um_user set status=#{status} where id=#{id}
+	</update>
 </mapper>

@@ -1,6 +1,8 @@
 package com.supersit.gzdlxx.pojo;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -17,13 +19,14 @@ public class UsersItem {
 	private String pcToken;//单用户登录判断（pc端）
 	private String ydToken;//单用户登录判断（移动端）
 	//private Jurisdiction jc;
-	Map map =new HashMap<String, Jurisdiction>();//功能权限集合
+	List<Jurisdiction> list =new ArrayList< Jurisdiction>();//功能权限集合
 	
-	public Map getMap() {
-		return map;
+	
+	public List<Jurisdiction> getList() {
+		return list;
 	}
-	public void setMap(Map map) {
-		this.map = map;
+	public void setList(List<Jurisdiction> list) {
+		this.list = list;
 	}
 	public String getAccount() {
 		return account;
