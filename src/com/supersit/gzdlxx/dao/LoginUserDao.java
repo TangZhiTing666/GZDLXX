@@ -58,5 +58,18 @@ public interface LoginUserDao {
 	 */
 	public void updateStatus(@Param("id")int id, @Param("status")String status);
 	
+	/**
+	 * 修改用户登录密码输入错误次数 初始值为0
+	 * @param id
+	 * @param number
+	 */
+	public void updatePwdErrNum(@Param("id")int id, @Param("number")int number);
+
+	/**
+	 * 通过用户id获取权限和用户信息
+	 * @param userid
+	 * @return
+	 */
+	public UsersItem findUser(@Param("userid")String userid);
 	
 }

@@ -56,8 +56,8 @@ public class loginInterceptor implements HandlerInterceptor{
         }
 		// intercept
         HttpSession session = request.getSession();
-        System.out.println("-------------------------------------------"+session.getAttribute("memberLogin"));
-        if (session.getAttribute("memberLogin") == null) { 
+       // System.out.println("-------------------------------------------"+session.getAttribute("memberLogin"));
+        if (session.getAttribute("gzdl_name") == null) { 
         	//response.getWriter().print(Constant.CHARACTER_ENCODING);
         	//response.setCharacterEncoding("UTF-8");
         	response.setContentType("text/html;charset=UTF-8"); 

@@ -21,13 +21,10 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.2.xsd">
 	
 	<!-- 加载jdbc资源文件 -->
-	<util:properties id="jdbc"
-		location="classpath:jdbc.properties"/>
+	<util:properties id="jdbc" location="classpath:jdbc.properties"/>
 	
-	<!-- 定义数据源 -->
-	<bean id="ds" 
-		class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+	<!-- 定义权限管理数据源 -->
+	<bean id="ds"  class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="url" value="#{jdbc.url}"/>
 		<property name="driverClassName" value="#{jdbc.driver}"/>
 		<property name="username" value="#{jdbc.user}"/>
@@ -41,52 +38,32 @@
 	</bean>
 	
 	<!-- 定义sqlSessionFactory -->
-	<bean id="sqlSessionFactory" 
-		class="org.mybatis.spring.SqlSessionFactoryBean">  
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
       <property name="dataSource" ref="ds" />
-      <!-- 在创建完当前的bean后，Spring会调用
-      	这个bean来扫描指定包下的XML文件。
-      	在扫描的过程中，它还会验证该XML
-      	文件，如果该文件中含有语法或类名
-      	等的错误，会导致扫描失败，
-      	Spring会报sqlSessionFactory相关的错误。 -->
-      <property name="mapperLocations" 
-      	value="classpath:com/supersit/gzdlxx/mapper/*.xml"/>
+      <property name="mapperLocations" value="classpath:com/supersit/gzdlxx/mapper/*.xml"/>
     </bean>
     
     <!-- 扫描DAO组件 -->
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-       <!-- 当前的bean创建之后，Spring会调用
-       	它扫描指定包下的Mapper接口，然后
-       	调用MyBatis来实现这些接口。 -->
-       <property name="basePackage" 
-       		value="com.supersit.gzdlxx.dao" />
-       	<!-- 当前bean会扫描带有指定注解的
-       		Mapper接口，该注解是需要自定义的。
-       		如果不配置这个条件，那么当前bean
-       		会扫描所有的接口。 -->
-       <!-- 
-       <property name="annotationClass" 
-           value="com.tarena.dao.MyBatisRepository"/>
-        -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">       
+       <property name="basePackage" value="com.supersit.gzdlxx.dao" />
+       <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" /> 
 	</bean>
 	<!-- 4. 事务管理 : DataSourceTransactionManager -->
-	<bean id="transactionManager"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="ds" />
 	</bean>
+	<!-- 配置基于注解的事务 -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+<!-- ****************************************************************************** -->	
 
-<!-- **********************************菜篮子数据源******************************************** -->
-
-<!-- 定义数据源 -->
-	<!-- <bean id="dsWx" 
-		class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+<!-- 定义农经数据数据源 -->
+	 <bean id="njds" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="url" value="#{jdbc.url}"/>
 		<property name="driverClassName" value="#{jdbc.driver}"/>
-		<property name="username" value="#{jdbc.user_clz}"/>
-		<property name="password" value="#{jdbc.password_clz}"/>
-		初始化连接大小  
+		<property name="username" value="#{jdbc.user_nj}"/>
+		<property name="password" value="#{jdbc.password_nj}"/>
+		<!--  初始化连接大小  -->
         <property name="initialSize" value="#{jdbc.initialSize}"/>
         <property name="maxActive" value="#{jdbc.maxActive}"/>
         <property name="maxIdle" value="#{jdbc.maxIdle}"/>
@@ -94,44 +71,28 @@
         <property name="maxWait" value="#{jdbc.maxWait}"/>
 	</bean>
 	
-	定义sqlSessionFactory
-	<bean id="sqlSessionFactoryWx"  class="org.mybatis.spring.SqlSessionFactoryBean">  
-      <property name="dataSource" ref="dsWx" />
-      在创建完当前的bean后，Spring会调用
-      	这个bean来扫描指定包下的XML文件。
-      	在扫描的过程中，它还会验证该XML
-      	文件，如果该文件中含有语法或类名
-      	等的错误，会导致扫描失败，
-      	Spring会报sqlSessionFactory相关的错误。
-      <property name="mapperLocations" 
-      	value="classpath:com/supersit/gzdlxx/mapperwx/*.xml"/>
-    </bean>
-    
-    扫描DAO组件
+	<!--定义sqlSessionFactory-->
+	<bean id="sqlSessionFactoryNj"  class="org.mybatis.spring.SqlSessionFactoryBean">  
+      <property name="dataSource" ref="njds" />
+      <property name="mapperLocations" value="classpath:com/supersit/gzdlxx/njmapper/*.xml"/>
+    </bean>   
+  <!--  扫描DAO组件-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-       当前的bean创建之后，Spring会调用
-       	它扫描指定包下的Mapper接口，然后
-       	调用MyBatis来实现这些接口。
-       <property name="basePackage" 
-       		value="com.supersit.gzdlxx.daowx" />
-       	当前bean会扫描带有指定注解的
-       		Mapper接口，该注解是需要自定义的。
-       		如果不配置这个条件，那么当前bean
-       		会扫描所有的接口。
+       <property name="basePackage" value="com.supersit.gzdlxx.njdao" />
+       <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryNj" />  
 	</bean>
-	4. 事务管理 : DataSourceTransactionManager
-	<bean id="transactionManagerWx"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dsWx" />
+	<!--4. 事务管理 : DataSourceTransactionManager-->
+	<bean id="transactionManagerNj" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="njds" />
 	</bean>
- -->
+ 	<!-- 配置基于注解的事务 -->
+	<tx:annotation-driven transaction-manager="sqlSessionFactoryNj"/>
 	
+<!-- ****************************************************************************** -->		
+
 	<!-- SringMVC整合后的相关配置 -->
 	<!-- 开启IOC注解扫描 -->
 	<context:component-scan  base-package="com.supersit.gzdlxx" />
-	
-	<!-- 开启MVC注解扫描 -->
-	<mvc:annotation-driven /> 
 	
 	<!-- responseBody编码处理 -->
 	<mvc:annotation-driven>
@@ -148,11 +109,14 @@
 			<mvc:mapping path="/**"/>
 			<bean class="com.supersit.gzdlxx.interceptor.loginInterceptor">
 				<property name="excludedUrls">
-					<list>						
+					<list>
+						<value>/index.do</value>					
 						<value>/login.do</value>
 						<value>/choose.do</value>
+						<!-- 
 						<value>/main.do</value>
-					</list>
+ 						-->				
+ 				</list>
 				</property>
 			</bean>
 		</mvc:interceptor>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--parameterType=入参 类型(可省略)  resultType=返回类型-->
+<mapper namespace="com.supersit.gzdlxx.njdao.NjzhDao">
+
+	<!-- 年份统计-->  	
+	<select id="getCountYear"  resultType="java.lang.String" statementType="STATEMENT">
+		select  distinct(NIANFEN) from  ${countTools.analysisClass} order by NIANFEN DESC
+	</select>
+	
+	<!-- 区域统计-->  	
+	<select id="getCountArea"  resultType="java.lang.String">
+		select   name from  (select distinct(AD_NUM),name from area)
+	</select>
+	
+	<!-- 区域对比统计-->  	
+	<select id="getCountByArea"  resultType="com.supersit.gzdlxx.util.ZHcount" statementType="STATEMENT">
+		SELECT AREA.NAME AS counttype, 
+		SUM (${countTools.analysisClass}.${countTools.analysisOfFactor}) AS countsum 
+		FROM ${countTools.analysisClass},AREA WHERE	NIANFEN = ${countTools.analysisDate} 
+		AND SUBSTR(${countTools.analysisClass}.AD_NUM,1,6) = SUBSTR(AREA.AD_NUM,1,6) 
+		GROUP BY AREA. NAME 
+	</select>
+
+	<!-- 时间对比统计-->  	
+	<select id="getCountByDate"  resultType="com.supersit.gzdlxx.util.ZHcount" statementType="STATEMENT">
+		SELECT	${countTools.analysisClass}. NIANFEN AS counttype,	 
+		SUM (${countTools.analysisClass}.${countTools.analysisOfFactor}) AS countsum 
+		FROM ${countTools.analysisClass},AREA 
+		WHERE AREA.NAME = ${countTools.analysisArea} 
+		AND SUBSTR (${countTools.analysisClass}.AD_NUM, 1, 6) = SUBSTR (AREA.AD_NUM, 1, 6) 
+		GROUP BY 
+		${countTools.analysisClass}. NIANFEN ORDER BY ${countTools.analysisClass}. NIANFEN desc
+	</select>
+	
+	<!-- 时间对比和区域对比统计表格-->  	
+	<resultMap type="com.supersit.gzdlxx.util.CountTable" id="getTable" >
+		<result column="AD_NUM" property="areanum"/>
+		<result column="name" property="areaname"/>
+		<association property="list" column="areanum" select="getCountByDateOfAreaNum"></association>
+	</resultMap>
+	<select id="getCounttable"  resultMap="getTable" statementType="STATEMENT">
+		select AD_NUM ,NAME FROM AREA 
+	</select>
+	<!-- 时间对比统计(通过行政编码进行比对)-->  	
+	<select id="getCountByDateOfAreaNum"  resultType="com.supersit.gzdlxx.util.ZHcount" statementType="STATEMENT">
+		SELECT	${countTools.analysisClass}. NIANFEN AS counttype,	
+		SUM (${countTools.analysisClass}.${countTools.analysisOfFactor}) AS countsum 
+		FROM ${countTools.analysisClass} RIGHT JOIN AREA 
+		ON AREA.AD_NUM = ${areanum} 
+		AND SUBSTR (${countTools.analysisClass}.AD_NUM, 1, 6) = SUBSTR (AREA.AD_NUM, 1, 6) 
+		GROUP BY 
+		${countTools.analysisClass}. NIANFEN ORDER BY ${countTools.analysisClass}. NIANFEN desc
+	</select>
+	
+	<!--  信息统计——农业基本情况-->  	
+	<select id="getCountAgriBasic"  resultType="com.supersit.gzdlxx.pojo.AgriBasic">
+		select AREA.NAME ,SUM(SUM_PERSON),SUM(AGRI_PERSON),SUM(COUNTRY_PERSON),SUM(COUNTRY_WORKER),
+		SUM(FIELD),SUM(WATER_FIELD),SUM(DRY_FIELD),SUM(ADD_FIELD),SUM(REDUCE_FIELD),SUM(ENGINE_POWER),
+		SUM(ENGINE_AREA),SUM(IRRIGATE_AREA),SUM(DISASTER_EFFECT),SUM(DISASTER_SUFFER) 
+		from AGRI_BASIC  RIGHT JOIN  AREA 
+		ON  SUBSTR (AGRI_BASIC.AD_NUM, 1, 6) = SUBSTR(AREA.AD_NUM ,1,6)
+		AND AGRI_BASIC.NIANFEN=#{countTools.analysisDate} 
+		GROUP BY AREA.NAME
+	</select>
+	
+	<!--  信息统计——农业收入情况-->  	
+	<select id="getCountAgriIncome"  resultType="com.supersit.gzdlxx.pojo.AgriIncome">
+		select AREA.NAME ,SUM(A_F_H_F_G_I),SUM(PLANT_INCOME),SUM(INDUSTRY_INCOME),SUM(GROSS_FEE),
+		SUM(NET_INCOME),SUM(PEASANT__INCOME),SUM(PEASANT__PERINCOME),SUM(FINANCE_INCOME),SUM(FINANCE_OUTCOME),SUM(CORN_SALE),
+		SUM(COTTON_SALE),SUM(OIL_SALE),SUM(MEAT_SALE),SUM(BYPRODUCT_PURCHASE) ,
+		SUM(C_EN_G_I) 
+		from AGRI_INCOME  RIGHT JOIN  AREA 
+		ON SUBSTR (AGRI_INCOME.AD_NUM, 1, 6) = SUBSTR(AREA.AD_NUM ,1,6)
+		AND AGRI_INCOME.NIANFEN=#{countTools.analysisDate} 
+		GROUP BY AREA.NAME
+	</select>
+	
+	<!--  信息统计——农业主要投入 -->  	
+	<select id="getCountAgriInvest"  resultType="com.supersit.gzdlxx.pojo.AgriInvest">
+		select AREA.NAME ,SUM(NFSW),SUM(PFSW),SUM(KFSW),SUM(COMPOUND_FERTILIZER),
+		SUM(FERTILIZER),SUM(NF),SUM(EL),SUM(PF),SUM(KF),SUM(FILM),
+		SUM(PESTICID) 
+		from AGRI_INVEST  RIGHT JOIN  AREA 
+		ON SUBSTR (AGRI_INVEST.AD_NUM, 1, 6) = SUBSTR(AREA.AD_NUM ,1,6) 
+		AND AGRI_INVEST.NIANFEN=#{countTools.analysisDate} 
+		GROUP BY AREA.NAME
+	</select>
+	
+	<!--  信息统计——农业及乡镇企业产值 -->  	
+	<select id="getCountAgryTownshipIndustries"  resultType="com.supersit.gzdlxx.pojo.AgryTownshipIndustries">
+		select AREA.NAME ,SUM(ENTERPRISE_PERSON),SUM(ENTERPRISE_ADD_VALUE),SUM(ENTERPRISE_BENEFIT_TAX),SUM(GSP),
+		SUM(SUM_AGRI),SUM(ADD_AGRI),SUM(SUM_INDU),SUM(SUM_CONS),SUM(SUM_TRA),SUM(SUM_TRADE),
+		SUM(SUM_FOREST),SUM(SUM_HERD),SUM(SUM_FISH)
+		from AGRI_TOWNSHIP_INDUSTRIES  RIGHT JOIN  AREA 
+		ON  (AGRI_TOWNSHIP_INDUSTRIES.AD_NUM, 1, 6) = SUBSTR(AREA.AD_NUM ,1,6) 
+		AND AGRI_TOWNSHIP_INDUSTRIES.NIANFEN=#{countTools.analysisDate} 
+		GROUP BY AREA.NAME
+	</select>
+	
+	<!--  信息统计——畜牧业渔业基本情况  -->  	
+	<select id="getCountBreedingFishingBasic"  resultType="com.supersit.gzdlxx.pojo.BreedingFishingBasic">
+		select AREA.NAME ,SUM(STOCK_IN),SUM(CATTLE_IN),SUM(COW_IN),SUM(SHEEP_IN),
+		SUM(PIG_OUT),SUM(MEAT),SUM(PCS_MEAT),SUM(MILK),SUM(EGG),SUM(FRESHWATER_BREED_AREA),
+		SUM(SEA_BREED_AREA),SUM(WATER_PRODUCT),SUM(SEA_PRODUCT),SUM(SEA_CATCH) ,SUM(FRESHWATER_PRODUCT) ,
+		SUM(SEA_FISH) ,SUM(FRESHWATER_FISH) 
+		from BREEDING_FISHING_BASIC  RIGHT JOIN  AREA 
+		ON  (BREEDING_FISHING_BASIC.AD_NUM, 1, 6) = SUBSTR(AREA.AD_NUM ,1,6) 
+		AND BREEDING_FISHING_BASIC.NIANFEN=#{countTools.analysisDate} 
+		GROUP BY AREA.NAME
+	</select>
+	
+</mapper>

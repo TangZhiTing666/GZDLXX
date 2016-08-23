@@ -108,18 +108,17 @@ z-index: 5;
 
 <script type="text/javascript">
 	function showqx(){
-		var list='';
 		<c:forEach var="qx" items="${resultitem.resultdata.list}">
 		var qxname='${qx.qxName}';
 		//alert(qxname)
 		if(qxname=="综合查询"){
 			$("#li_zh").addClass("liLocked");
-			$("#li_zh").attr('onclick',"javascript:window.location.href='main.do?ipp=0'"); 
+			$("#li_zh").attr('onclick',"javascript:window.location.href='main.do?jspflog=1'"); 
 			$("#li_zh i img").attr('src',"resources/images/l01.png"); 
 		}else if(qxname=="现代农业"){
 			$("#li_xd").addClass("liLocked");
 			$("#li_xd").attr('onclick',"javascript:window.location.href='main.jsp?ipp=1'"); 
-			$("#li_xd i img").attr('src',"resources/images/l02.png"); 			
+			$("#li_xd i img").attr('src',"resources/images/l02.png"); 		 	
 		}else if(qxname=="农经专题发布"){
 			$("#li_nj").addClass("liLocked");
 			$("#li_nj").attr('onclick',"javascript:window.location.href='main.jsp'"); 
@@ -165,13 +164,16 @@ z-index: 5;
 			$("#li_njaq").attr('onclick',"javascript:window.location.href='main.jsp'"); 
 			$("#li_njaq i img").attr('src',"resources/images/l13.png"); 
 		}else if(qxname=="在线更新"){
-			$("#li_zx").addClass("liLocked");
+		/* 	$("#li_zx").addClass("liLocked");
 			$("#li_zx").attr('onclick',"javascript:window.location.href='main.jsp'"); 
-			$("#li_zx i img").attr('src',"resources/images/l14.png"); 
-		}else if(qxname=="广州市菜篮子子系统"){
+			$("#li_zx i img").attr('src',"resources/images/l14.png");  */
+		}else if(qxname=="广州菜篮子子系统"){
 			/* $("#li_clz").addClass("liLocked");
 			$("#li_clz").attr('onclick',"javascript:window.location.href='main.jsp'"); 
 			$("#li_clz i img").attr('src',"resources/images/l15.png");  */
+			$("#li_zx").addClass("liLocked");
+			$("#li_zx").attr('onclick',"javascript:window.location.href='http://localhost:7080/GZCLZ/main.do?userid=-8'"); 
+			$("#li_zx i img").attr('src',"resources/images/l15.png"); 
 		}
 		</c:forEach> 
 	}
@@ -235,16 +237,16 @@ z-index: 5;
 				<i class="icon13"><img src="resources/images/h_l13.png"><p style="white-space:normal;">农机安全监理</p></i>
 			</li>
 			<li onclick="" id="li_zx">
-				<i class="icon14"><img src="resources/images/h_l14.png"><p style="white-space:normal;">在线更新</p></i>
+				<i class="icon14"><img src="resources/images/h_l15.png"><p style="white-space:normal;">广州市菜篮子子系统</p></i>
 			</li>
 		</ul>
 	</section>
 </div>
     <span><a href="login.do" title="退出登录"><img src="resources/images/exit.png" style="width: 90px;height: 90px;float: right;margin-right: 5%;margin-top: 1%;" alt="退出登录"></a></span>
     </div>
-    <div class="loginbm">版权所有：广州市农业信息中心&nbsp;&nbsp;&nbsp;&nbsp;粤ICP备09161544号&nbsp;&nbsp;&nbsp;&nbsp;技术支持：<a href="http://www.supersit.com/" target="_blank">广东旭普空间信息技术发展有限公司</a></div>
+    <div class="loginbm">版权所有：广州市农业信息中心&nbsp;&nbsp;&nbsp;&nbsp;粤ICP备09161544号<html></html>&nbsp;&nbsp;&nbsp;&nbsp;技术支持：<a href="http://www.supersit.com/" target="_blank">广东旭普空间信息技术发展有限公司</a></div>
 	
     
 </body>
 
-</html>
+

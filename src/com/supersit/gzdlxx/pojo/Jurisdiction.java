@@ -9,6 +9,14 @@ public class Jurisdiction {
 	private int id;	//权限id
 	private String qxName;//权限名字
 	private int parentid;//权限父级id
+	private int type;//权限级别标识 0：第一级 1：第二级 2：第三级 3：第四级。。。。。。。。。 
+	
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
 	public int getId() {
 		return id;
 	}

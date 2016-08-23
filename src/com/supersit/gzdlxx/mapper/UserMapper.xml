@@ -2,14 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <!--parameterType=入参 类型(可省略)  resultType=返回类型-->
 <mapper namespace="com.supersit.gzdlxx.dao.LoginUserDao">
-	<!-- 用户登录查询 -->
-	<!--  
+	<!-- 用户登录查询 -->  
 	<resultMap type="com.supersit.gzdlxx.pojo.UsersItem" id="loginMapping">
-		<result column="unit_id" property="unitId"/>
+		<result column="id" property="id"/>
+		<association property="list" column="id" select="getJurisdiction"></association>
 	</resultMap>
-	-->
-	<select id="selectUser" parameterType="java.lang.String" resultType="com.supersit.gzdlxx.pojo.UsersItem">
-		select id,account,username,status,password as userPwd,pctoken,ydtoken from UM_USER where account=#{username}
+	<select id="selectUser" parameterType="java.lang.String" resultMap="loginMapping">
+		select id,account,username,status,password as userPwd,pctoken,ydtoken,PWD_ERR_NUM as pwderrnum from UM_USER where account=#{username}
 	</select>
 	
 	<!-- 缓存配置 -->
@@ -19,20 +18,35 @@
 		select * from member where mobile=#{mobile} and isdelete=1
 	</select>
 	-->
+	
+	<!-- 用户信息、权限查询 -->  
+	<resultMap type="com.supersit.gzdlxx.pojo.UsersItem" id="findMapping">
+		<result column="id" property="id"/>
+		<association property="list" column="id" select="getJurisdiction"></association>
+	</resultMap>
+	<select id="findUser" parameterType="java.lang.String" resultMap="findMapping">
+		select id,account,username,status,password as userPwd,pctoken,ydtoken from UM_USER where id=#{userid}
+	</select>
+	
 	<!-- 用户权限查询 -->
 	<resultMap type="com.supersit.gzdlxx.pojo.Jurisdiction" id="qxMapping">
-		<result column="id" property="id"/>
+		<result column="id" property="id"/> 
 		<result column="name" property="qxName"/>
 		<result column="parent_id" property="parentid"/>
+		<result column="type" property="type"/>		
 	</resultMap>
 	<select id="getJurisdiction" resultMap="qxMapping">
-		select id,name,parent_id  from (
+		select id,name,parent_id,type  from (
 		 select g.* from mf_column_info g where g.id in (
 		  select f.MFCOLUMNID from um_group2mfcolumn f where f.GROUP_ID in(
 		   select e.ID from um_group e where e.id in (
 		    select d.group_id from um_user2group d	where d.USER_ID=#{id}
 		)))) order by parent_id asc
 	</select>
+	<!-- 修改用户登录密码输入错误次数 -->
+	<update id="updatePwdErrNum" >
+	 	update um_user set PWD_ERR_NUM=#{number} where id=#{id}
+	</update>
 	<!-- 修改pctoken -->
 	<update id="updatePcToken" >
 	 	update um_user set pctoken=#{number} where id=#{id}

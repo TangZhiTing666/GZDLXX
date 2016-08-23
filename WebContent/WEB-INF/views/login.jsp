@@ -1,4 +1,5 @@
-﻿<%@ page language="java" contentType="text/html; charset=utf-8"
+﻿<%@page import="java.util.Date"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%@ page isELIgnored ="false" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -48,7 +49,7 @@ html,body{width:100%; height:100%; overflow:hidden;
        }        
      }     
      function validate ()   {   
-       var inputCode = document.getElementById("validCode").value;   
+      /*  var inputCode = document.getElementById("validCode").value;   
        if(inputCode.length <=0)   
        {   
            alert("请输入验证码！");   
@@ -59,14 +60,14 @@ html,body{width:100%; height:100%; overflow:hidden;
           createCode();//刷新验证码   
        }   
        else   
-       {   
+       {  */  
          //alert("^-^ OK");  
          //window.location.href="choose.do";
          var form=document.getElementById("loginform");
          form.method="post";
          form.action="choose.do";
          form.submit();
-       }   
+     // }   
  }   
       
       document.onkeydown=function(event){

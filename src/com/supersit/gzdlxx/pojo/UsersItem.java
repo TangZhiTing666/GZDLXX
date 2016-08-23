@@ -20,8 +20,13 @@ public class UsersItem {
 	private String ydToken;//单用户登录判断（移动端）
 	//private Jurisdiction jc;
 	List<Jurisdiction> list =new ArrayList< Jurisdiction>();//功能权限集合
-	
-	
+	private int pwderrnum;//用户登录密码输入错误次数
+	public int getPwderrnum() {
+		return pwderrnum;
+	}
+	public void setPwderrnum(int pwderrnum) {
+		this.pwderrnum = pwderrnum;
+	}
 	public List<Jurisdiction> getList() {
 		return list;
 	}
