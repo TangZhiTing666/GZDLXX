@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!-- <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%> -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -10,18 +11,19 @@
         span{display: inline;}
         .td1{width: 20%}
     </style>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <script language="JavaScript" src="js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/jquery.idTabs.min.js"></script>
-    <script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
-    <script type="text/javascript" src="js/jquery.jqprint-0.3.js"></script>
+    <link href="../resources/css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="../resources/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" src="../resources/js/jquery.jqprint-0.3.js"></script>
     
     <link rel="stylesheet" href="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/dijit/themes/tundra/tundra.css">
     <link rel="stylesheet" href="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/esri/css/esri.css">
-    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="../resources/css/map.css">
 
-    <link rel="stylesheet" type="text/css" href="css/css/style.css" media="screen"/>
-    <script src="js/jquery.paginate.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../resources/css/css/style.css" media="screen"/>
+    <script src="../resources/js/jquery.paginate.js" type="text/javascript"></script>
+    
     
 <script>var dojoConfig = { parseOnLoad: true };</script>
 <script src="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/init.js"></script>
@@ -62,8 +64,7 @@
        })  
    </script>
    <script type="text/javascript">
-   var map,layer,southCarolinaCounties,bzh04LayerURL,bzh07LayerURL,bzh10LayerURL;
-
+   var map,layer,southCarolinaCounties;
   require([
     "esri/map", 
     "esri/layers/ArcGISTiledMapServiceLayer", 
@@ -79,8 +80,8 @@
     "esri/Color",
     "esri/graphic",
     "esri/geometry/Point",
-    "esri/SpatialReference", 
-    "esri/geometry/Polygon",  
+    "esri/SpatialReference",
+    "esri/geometry/Polygon",   
     "dojo/domReady!"
 ], function(Map, ArcGISTiledMapServiceLayer,LayerList,InfoTemplate,domConstruct, Popup,ArcGISDynamicMapServiceLayer,GraphicsLayer,FeatureLayer,SimpleFillSymbol,SimpleLineSymbol,Color,Graphic,Point,SpatialReference,Polygon) {
     var popup = new Popup({
@@ -99,110 +100,30 @@
       map.addLayer(baseMapLayer);
 
       var _blockGroupInfoTemplate = new InfoTemplate();
-      _blockGroupInfoTemplate.setTitle("<b>详细信息</b>");
+      _blockGroupInfoTemplate.setTitle("<b>${UNIT}</b>");
 
       var _censusInfoContent =
-        "<table class='infoPopup'><tr><td class='td1'>项目名称：</td><td>${项目名称}</td></tr><tr><td class='td1'>所在区：</td><td>${所在区}</td></tr><tr><td class='td1'>项目情况：</td><td>${项目情况}</td></tr></table>";
+        "<table class='infoPopup'><tr><td class='td1'>生产单位：</td><td><a href='javascript:showDetail()'>${UNIT}</a></td></tr><tr><td class='td1'>产地地址：</td><td>${ADDRESS}</td></tr><tr><td class='td1'>证书编号：</td><td>${CERT_NO}</td></tr><tr><td class='td1'>产地联系人(电话)：</td><td>${CONTACT}</td></tr><tr><td class='td1'>操作人(电话)：</td><td>${OPERATOR}</td></tr><tr><td class='td1'>类型：</td><td>${TYPE}</td></tr><tr><td class='td1'>区名：</td><td>${DISTRICT}</td></tr><tr><td class='td1'>镇名：</td><td>${TOWN}</td></tr><tr><td class='td1'>村名：</td><td>${VILLAGE}</td></tr></table>";
       
       _blockGroupInfoTemplate.setContent(_censusInfoContent);
 
-      bzh04LayerURL = "http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9004/MapServer";
-      bzh07LayerURL = "http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9007/MapServer";
-      bzh10LayerURL = "http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9010/MapServer";
-
-      var bzh04LayerOptions = {
-        "id": "标准化农田2004",
+      var demographicsLayerURL = "http://58.62.200.71:8399/arcgis/rest/services/gzwghjd90/MapServer";
+      var demographicsLayerOptions = {
+        "id": "无公害基地",
         "opacity": 1,
         "showAttribution": false
       };
-      var bzh07LayerOptions = {
-        "id": "标准化农田2007",
-        "opacity": 1,
-        "showAttribution": false
-      };
-      var bzh10LayerOptions = {
-        "id": "标准化农田2010",
-        "opacity": 1,
-        "showAttribution": false
-      };
-  
-      var bzh04Layer = new ArcGISDynamicMapServiceLayer(bzh04LayerURL, bzh04LayerOptions);
-      var bzh07Layer = new ArcGISDynamicMapServiceLayer(bzh07LayerURL, bzh07LayerOptions);
-      var bzh10Layer = new ArcGISDynamicMapServiceLayer(bzh10LayerURL, bzh10LayerOptions);
-
-      bzh04Layer.setInfoTemplates({
+      
+      var demographicsLayer = new ArcGISDynamicMapServiceLayer(demographicsLayerURL, demographicsLayerOptions);
+      demographicsLayer.setInfoTemplates({
         0: { infoTemplate: _blockGroupInfoTemplate }
       });
-      bzh07Layer.setInfoTemplates({
-        0: { infoTemplate: _blockGroupInfoTemplate }
-      });
-      bzh10Layer.setInfoTemplates({
-        0: { infoTemplate: _blockGroupInfoTemplate }
-      });
-
-      map.addLayer(bzh04Layer);
-
-      map.infoWindow.resize(350, 200);
-
-      var layerList04 = new LayerList({
-        map: map,    
-        showSubLayers: false    
-      },"layerList04");
+      map.addLayer(demographicsLayer);
      
-      $(".mapChoose").click(function(){
-        $(".mapChoose").removeClass("map-selected");
-        if($(this).attr("id")==="bzh04"){
-          $(this).addClass("map-selected");
-          $(".info-list").empty(); 
-          map.removeLayer(bzh04Layer);
-          map.removeLayer(bzh07Layer);
-          map.removeLayer(bzh10Layer);
-          map.removeLayer(layer);
-          map.infoWindow.hide();
-          map.addLayer(bzh04Layer);
-          $("#layerList07").css("display","none");
-          $("#layerList10").css("display","none");
-          $("#layerList04").css("display","block");
-          
-        }
-        else if($(this).attr("id")==="bzh07"){
-          $(this).addClass("map-selected");
-          $(".info-list").empty(); 
-          map.removeLayer(bzh04Layer);
-          map.removeLayer(bzh07Layer);
-          map.removeLayer(bzh10Layer);
-          map.removeLayer(layer);
-          map.infoWindow.hide();
-          map.addLayer(bzh07Layer);
-
-          $("#layerList04").css("display","none");
-          $("#layerList10").css("display","none");
-          $("#layerList07").css("display","block");
-          var layerList07 = new LayerList({
-            map: map,    
-            showSubLayers: false    
-          },"layerList07");
-          layerList07.startup();
-        }
-        else if($(this).attr("id")==="bzh10"){
-          $(this).addClass("map-selected");
-          $(".info-list").empty(); 
-          map.removeLayer(bzh04Layer);
-          map.removeLayer(bzh07Layer);
-          map.removeLayer(bzh10Layer);
-          map.removeLayer(layer);
-          map.infoWindow.hide();
-          map.addLayer(bzh10Layer);
-          $("#layerList04").css("display","none");
-          $("#layerList07").css("display","none");
-          $("#layerList10").css("display","block");
-          var layerList10 = new LayerList({
-            map: map,    
-            showSubLayers: false    
-          },"layerList10");
-          layerList10.startup();
-        }
-      })
+      var layerList = new LayerList({
+        map: map,    
+        showSubLayers: false   
+      },"layerList");
 
       layer = new GraphicsLayer({id:"layer"});
 
@@ -210,14 +131,18 @@
         layer.clear();
         map.infoWindow.hide();
       })
-      
+
+      map.infoWindow.resize(350, 200);
+
       southCarolinaCounties = new ArcGISDynamicMapServiceLayer("http://58.62.200.71:8399/arcgis/rest/services/QY/MapServer");
 
+      
         $.ajax({
             type:"get",
             url:"http://58.62.200.71:8399/arcgis/rest/services/QY/MapServer/0/query?text=%25&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=true&outSR=&outFields=*&f=pjson",
             dataType:"jsonp",
-            success:function(data){               
+            success:function(data){
+                
                 var centerdata = data.features;
                 $("input[name='areaname']").click(function(){
                   var layerDefinitions = [];
@@ -238,6 +163,7 @@
                     }
                   }
                 })
+
             },
             error:function(){
                 alert("error");
@@ -254,17 +180,15 @@ data-dojo-props="design:'headline',gutters:false">
         <dl class="leftmenu">           
         <dd>
         <div class="title">
-        <span><img src="images/leftico01.png" /></span>图层控制
+        <span><img src="../resources/images/leftico01.png" /></span>图层控制
         </div>
             <ul class="menuson">            
-                <li><div id="layerList04"></div>
-                <div id="layerList07" style="display: none;"></div>
-                <div id="layerList10" style="display: none;"></div></li>
+                <li><div id="layerList"></div></li>
             </ul>
         </dd>       
         <dd>
         <div class="title">
-        <span><img src="images/leftico02.png" /></span>专题信息
+        <span><img src="../resources/images/leftico02.png" /></span>专题信息
         </div>
         <ul class="menuson">
             <li>
@@ -609,21 +533,21 @@ data-dojo-props="design:'headline',gutters:false">
             </table>
             <div id="infosearch">信息查询<label style="font-weight: bold;">(共<label id="totalListLength" style="color: red;font-weight: bold;"></label>条记录)</label></div>
                 <ul class="info-type-and-search">
-                    <!-- <li>
+                    <li>
                         <input type="radio" name="typename" checked="checked" id="alltype" value="全部">全部</input>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="typename" id="ltqy" value="龙头企业">龙头企业</input>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="typename" id="sfq" value="示范区">示范区</input>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <input type="radio" name="typename" id="scjd" value="蔬菜基地">蔬菜基地</input>
-                    </li> -->
+                        <input type="radio" name="typename" id="sc" value="水产">水产</input>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="typename" id="zz" value="种植">种植</input>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="typename" id="xm" value="畜牧">畜牧</input>
+                    </li>
                     <li>
                         <input type="text" style="width: 40%;height: 20px;" id="searchtext"></input>&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="button" value="搜索" style="width: 15%;height: 25px;" id="searchbtn"></input>
                         <input type="button" value="清除定位" style="width: 20%;height: 25px;" id="clearbtn"></input>
                     </li>
-                    <li></li>
+                    
                 </ul>
                 
-                <ul class="info-list">
+                <ul class="info-list" >
                 </ul>
                 <div id="demo4"></div>
             </li>
@@ -638,77 +562,62 @@ data-dojo-props="design:'headline',gutters:false">
                 <div class="tool-control-wrap">
                     <div class="left float-l">
                         <!-- <div class="remoteimage">
-                            <span id="remoteimage_control" class="last"><img src="images/icon/layer.png"></span>
+                            <span id="remoteimage_control" class="last"><img src="../resources/images/icon/layer.png"></span>
                             <i>遥感影像</i>
                         </div>
                         <b></b> -->
-                        <div class="bzh04 map-selected mapChoose" id="bzh04">
-                            <span id="bzh04_control" class="last"><img src="images/icon/layer.png"></span>
-                            <i>标准化农田2004</i>
-                        </div>
-                        <b></b>
-                        <div class="bzh07 mapChoose" id="bzh07">
-                            <span id="bzh07_control" class="last"><img src="images/icon/layer.png"></span>
-                            <i>标准化农田2007</i>
-                        </div>
-                        <b></b>
-                        <div class="bzh10 mapChoose" id="bzh10">
-                            <span id="bzh10_control" class="last"><img src="images/icon/layer.png"></span>
-                            <i>标准化农田2010</i>
-                        </div>
-                        <b></b>
                         <div class="statement">
-                            <span id="statement_control" class="last"><img src="images/icon/tongji.png"></span>
+                            <span id="statement_control" class="last"><img src="../resources/images/icon/tongji.png"></span>
                             <i>统计报表</i>
                         </div>
                         <b></b>
                         <div class="legend">
-                            <span id="legend_control" class="last"><img src="images/icon/legendicon.png"></span>
+                            <span id="legend_control" class="last"><img src="../resources/images/icon/legendicon.png"></span>
                             <i>图例</i>
                         </div>
                         <b></b>
                         <!-- <div class="fullscr">
-                            <span id="fullscr_control" class="last"><img src="images/icon/menu.png"></span>
+                            <span id="fullscr_control" class="last"><img src="../resources/images/icon/menu.png"></span>
                             <i>全屏</i>
                         </div>
                         <b></b> -->
                         <div class="basictool">
-                            <span id="basictool_control" class="last"><img src="images/icon/menu.png"></span>
+                            <span id="basictool_control" class="last"><img src="../resources/images/icon/menu.png"></span>
                             <i>工具</i>
                             <em></em>
                         </div>
                         <div class="detail-box">
                         <ul id="boxul" class="boxinfo">
                             <li id="zoomin">
-                                <span class="last"><img src="images/icon/zoomin.png"></span>
+                                <span class="last"><img src="../resources/images/icon/zoomin.png"></span>
                                 <i>拉框放大</i>
                             </li>
                             <li id="zoomout">
-                               <span class="last"><img src="images/icon/zoomout.png"></span>
+                               <span class="last"><img src="../resources/images/icon/zoomout.png"></span>
                                <i >拉框缩小</i>
                             </li>
                             <li id="zoomprev">
-                               <span class="last"><img src="images/icon/previous.png"></span>
+                               <span class="last"><img src="../resources/images/icon/previous.png"></span>
                                <i>前一视图</i>
                             </li>
                             <li id="zoomnext">
-                               <span class="last"><img src="images/icon/next.png"></span>
+                               <span class="last"><img src="../resources/images/icon/next.png"></span>
                                <i>后一视图</i>
                             </li>
                             <li id="pan" class="map-short">
-                               <span class="last"><img src="images/icon/pan.png"></span>
+                               <span class="last"><img src="../resources/images/icon/pan.png"></span>
                                <i>平移</i>
                             </li>
                             <li id="extent" class="map-short">
-                               <span class="last"><img src="images/icon/earth.png"></span>
+                               <span class="last"><img src="../resources/images/icon/earth.png"></span>
                                <i>全图</i>
                             </li>
                             <li id="printmap" class="map-short">
-                               <span class="last"><img src="images/icon/print.png"></span>
+                               <span class="last"><img src="../resources/images/icon/print.png"></span>
                                <i>打印</i>
                             </li>
                             <li id="deactivate" class="map-short">
-                               <span class="last"><img src="images/icon/close.png"></span>
+                               <span class="last"><img src="../resources/images/icon/close.png"></span>
                                <i>取消</i>
                             </li> 
                              
@@ -723,7 +632,7 @@ data-dojo-props="design:'headline',gutters:false">
             <div id="legend-container">
                 <div class="legend-control-wrap">
                     <div class="legend-left float-l">
-                        <img src="images/legend/Bzhnt_Legend.png">
+                        <img src="../resources/images/legend/Wghjd_Legend.png">
                     </div>
                 </div>
             </div>
@@ -745,8 +654,6 @@ data-dojo-props="design:'headline',gutters:false">
             $("#areaChoose").removeClass("disnone");
             $("#areaSelected").html('广州市');
             $("input[name='areaname']").removeAttr("checked");
-
-
             require([
             "esri/geometry/Point",
             "esri/SpatialReference",
@@ -770,6 +677,8 @@ data-dojo-props="design:'headline',gutters:false">
             $("input[name$='Tname']").removeAttr("checked");
         }
         
+        
+
         $('div[class="basictool"]').click(function(){
             $('div[class="detail-box"]').toggle("fast",function(){
                 if($('div[class="detail-box"]').is(":hidden")){
@@ -787,7 +696,7 @@ data-dojo-props="design:'headline',gutters:false">
             window.open('statement.jsp','_blank');
         })
         function showDetail(){
-            window.open("page.html");
+            window.open("wghcp.jsp");
         }
         $("div[class='legend']").click(function(){
             $("#app-left-bottom").toggle("fast",function(){
@@ -864,64 +773,123 @@ data-dojo-props="design:'headline',gutters:false">
 </script>
 <script type="text/javascript">
     $(function(){
-      var listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9004/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
-      getListAjax();
-      $(".mapChoose").click(function(){
-        if($(this).attr("id")==="bzh04"){
-          $(".info-list").empty();
-          $("#demo4").empty();
-          $("#totalListLength").empty();
-          listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9004/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
-          getListAjax();
-        }
-        else if($(this).attr("id")==="bzh07"){
-          $(".info-list").empty();
-          $("#demo4").empty();
-          $("#totalListLength").empty();
-          listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9007/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
-          getListAjax();
-        }
-        else if($(this).attr("id")==="bzh10"){
-          $(".info-list").empty();
-          $("#demo4").empty();
-          $("#totalListLength").empty();
-          listUrl="http://58.62.200.71:8399/arcgis/rest/services/gzbzhnt9010/MapServer/0/query?text=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=%E9%A1%B9%E7%9B%AE%E5%90%8D%E7%A7%B0+not+like+%27%25+%25%27&returnGeometry=true&outSR=&outFields=*&f=pjson";
-          getListAjax();
-        }
-      })
-
-      function getListAjax(){
         $.ajax({
             type:"get",
-            url:listUrl,
+            url:"http://58.62.200.71:8399/arcgis/rest/services/gzwghjd90/MapServer/0/query?text=%25&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&where=&returnGeometry=true&outSR=&outFields=*&f=pjson",
             dataType:"jsonp",
             success:function(data){
-
                 var datalist = data.features;
                 var newlist =new Array();
                 //初始化
                 for(var i=0;i<datalist.length;i++){
                     var curFeature = datalist[i];
-                    //if (curFeature.attributes.项目名称!=" ") {
-                      newlist.push(datalist[i]);
-                    //}
+                    /*var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+")'>"+curFeature.attributes.NAME+"</a></li>"
+                    $(".info-list").append($html);*/
+                    newlist.push(datalist[i]);
+
                 }
                 startPage();
-               
+                //全部    
+                $("#alltype").click(function(){
+                    $(".info-list").empty();
+                    newlist=[];
+                    var keyword = $("#searchtext").val();                    
+                    for(var i=0;i<datalist.length;i++){
+                        var curFeature = datalist[i];
+                        var t = curFeature.attributes.UNIT.indexOf(keyword);
+                        if(t>=0){
+                            newlist.push(datalist[i]);       
+                        }
+                    }
+                    startPage();
+                                                        
+                
+            })
+
+                //水产
+                $("#sc").click(function(){
+                    $(".info-list").empty();
+                    newlist=[];
+                    var keyword = $("#searchtext").val();
+                    for(var i=0;i<datalist.length;i++){
+                        var curFeature = datalist[i];
+                        var t = curFeature.attributes.UNIT.indexOf(keyword);
+                        var t1 = curFeature.attributes.TYPE.indexOf("水产");
+                        if(t1>=0&&t>=0){
+                            /*var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+")'>"+curFeature.attributes.NAME+"</a></li>"
+                            $(".info-list").append($html);*/
+                            newlist.push(datalist[i]);
+                        }
+                    }
+                    startPage();
+                })
+                //种植
+                $("#zz").click(function(){
+                    $(".info-list").empty();
+                    newlist=[];
+                    var keyword = $("#searchtext").val();
+                    for(var i=0;i<datalist.length;i++){
+                        var curFeature = datalist[i];
+                        var t = curFeature.attributes.UNIT.indexOf(keyword);
+                        var t1 = curFeature.attributes.TYPE.indexOf("种植");
+                        if(t1>=0&&t>=0){
+                            /*var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+")'>"+curFeature.attributes.NAME+"</a></li>"
+                            $(".info-list").append($html);*/
+                            newlist.push(datalist[i]);
+                        }
+                    }
+                    startPage();
+                })
+                //畜牧
+                $("#xm").click(function(){
+                    $(".info-list").empty();
+                    newlist=[];
+                    var keyword = $("#searchtext").val();
+                    for(var i=0;i<datalist.length;i++){
+                        var curFeature = datalist[i];
+                        var t = curFeature.attributes.UNIT.indexOf(keyword);
+                        var t1 = curFeature.attributes.TYPE.indexOf("畜牧");
+                        if(t1>=0&&t>=0){
+                            /*var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+")'>"+curFeature.attributes.NAME+"</a></li>"
+                            $(".info-list").append($html);*/
+                            newlist.push(datalist[i]);
+                        }
+                    }
+                    startPage();
+                })
                 $("#searchbtn").click(function(){
                     var keyword = $("#searchtext").val();
                     $(".info-list").empty();
                     newlist=[];  
-                      for(var i=0;i<datalist.length;i++){
-                        var curFeature = datalist[i];
-                        var t = curFeature.attributes.项目名称.indexOf(keyword);
-                        if(t>=0){
+                    
+                    var selectedType = $("input[name='typename']:checked").attr("value");
+                    if(selectedType==="全部"){
                         
-                          newlist.push(datalist[i]);
-                        
+                        for(var i=0;i<datalist.length;i++){
+                            var curFeature = datalist[i];
+                            var t = curFeature.attributes.UNIT.indexOf(keyword);
+                            if(t>=0){
+                                /*var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+")'>"+curFeature.attributes.NAME+"</a></li>"
+                                $(".info-list").append($html);*/
+                                newlist.push(datalist[i]);
+                            }                                        
+                        } 
+                        startPage();                   
+                    }
+                    else{
+
+                        for(var i=0;i<datalist.length;i++){
+                            var curFeature = datalist[i];
+                            var t = curFeature.attributes.UNIT.indexOf(keyword);
+                            var t1 = curFeature.attributes.TYPE.indexOf(selectedType);
+                            if(t1>=0&&t>=0){
+                                /*var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+")'>"+curFeature.attributes.NAME+"</a></li>"
+                                $(".info-list").append($html);*/
+                                newlist.push(datalist[i]);
+                            }
                         }
-                      }
-                      startPage();
+                        startPage();
+                    }
                 }) 
 
                 function startPage(){
@@ -930,11 +898,9 @@ data-dojo-props="design:'headline',gutters:false">
                  var eachPage = 8;
                   $("#totalListLength").append(totalListLength);
                   if(newlist.length>eachPage){
-                    
                     for(var k=0;k<eachPage;k++){
                       var curFeature = newlist[k];
-                      var str = JSON.stringify(curFeature.geometry);    
-                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                      var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+","+"\""+curFeature.attributes.UNIT+"\""+","+"\""+curFeature.attributes.ADDRESS+"\""+","+"\""+curFeature.attributes.CERT_NO+"\""+","+"\""+curFeature.attributes.CONTACT+"\""+","+"\""+curFeature.attributes.OPERATOR+"\""+","+"\""+curFeature.attributes.TYPE+"\""+","+"\""+curFeature.attributes.DISTRICT+"\""+","+"\""+curFeature.attributes.TOWN+"\""+","+"\""+curFeature.attributes.VILLAGE+"\""+")'>"+curFeature.attributes.UNIT+"</a></li>";
                       $(".info-list").append($html);
 
                     }
@@ -954,13 +920,12 @@ data-dojo-props="design:'headline',gutters:false">
                       images    : false,
                       mouse   : 'press',
                       onChange: function(page){
-                                  $(".info-list").empty();                     
+                                  $(".info-list").empty();                                  
                                   var currentPage= $(".jPag-current").text();
                                   for(var j=0;j<newlist.length;j++){
                                     var curFeature = newlist[j];
                                     if(j>=(currentPage-1)*eachPage &&j<=(currentPage*eachPage)-1){
-                                      var str = JSON.stringify(curFeature.geometry);
-                                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                                      var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+","+"\""+curFeature.attributes.UNIT+"\""+","+"\""+curFeature.attributes.ADDRESS+"\""+","+"\""+curFeature.attributes.CERT_NO+"\""+","+"\""+curFeature.attributes.CONTACT+"\""+","+"\""+curFeature.attributes.OPERATOR+"\""+","+"\""+curFeature.attributes.TYPE+"\""+","+"\""+curFeature.attributes.DISTRICT+"\""+","+"\""+curFeature.attributes.TOWN+"\""+","+"\""+curFeature.attributes.VILLAGE+"\""+")'>"+curFeature.attributes.UNIT+"</a></li>";
                                         $(".info-list").append($html);
                                     }
                                   }        
@@ -971,8 +936,7 @@ data-dojo-props="design:'headline',gutters:false">
                   else{
                     for(var k=0;k<newlist.length;k++){
                       var curFeature = newlist[k];
-                      var str = JSON.stringify(curFeature.geometry);
-                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                      var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+","+"\""+curFeature.attributes.UNIT+"\""+","+"\""+curFeature.attributes.ADDRESS+"\""+","+"\""+curFeature.attributes.CERT_NO+"\""+","+"\""+curFeature.attributes.CONTACT+"\""+","+"\""+curFeature.attributes.OPERATOR+"\""+","+"\""+curFeature.attributes.TYPE+"\""+","+"\""+curFeature.attributes.DISTRICT+"\""+","+"\""+curFeature.attributes.TOWN+"\""+","+"\""+curFeature.attributes.VILLAGE+"\""+")'>"+curFeature.attributes.UNIT+"</a></li>";
                       $(".info-list").append($html);
 
                     }
@@ -994,8 +958,7 @@ data-dojo-props="design:'headline',gutters:false">
                                   for(var j=0;j<newlist.length;j++){
                                     var curFeature = newlist[j];
                                     if(j>=(currentPage-1)*eachPage &&j<=(currentPage*eachPage)-1){
-                                      var str = JSON.stringify(curFeature.geometry);
-                                      var $html = "<li><a href='javascript:positionFeature("+str+","+"\""+curFeature.attributes.项目名称+"\""+","+"\""+curFeature.attributes.所在区+"\""+","+"\""+curFeature.attributes.项目情况+"\""+")'>"+curFeature.attributes.项目名称+"</a></li>";
+                                      var $html = "<li><a href='javascript:positionFeature("+curFeature.geometry.x+","+curFeature.geometry.y+","+"\""+curFeature.attributes.UNIT+"\""+","+"\""+curFeature.attributes.ADDRESS+"\""+","+"\""+curFeature.attributes.CERT_NO+"\""+","+"\""+curFeature.attributes.CONTACT+"\""+","+"\""+curFeature.attributes.OPERATOR+"\""+","+"\""+curFeature.attributes.TYPE+"\""+","+"\""+curFeature.attributes.DISTRICT+"\""+","+"\""+curFeature.attributes.TOWN+"\""+","+"\""+curFeature.attributes.VILLAGE+"\""+")'>"+curFeature.attributes.UNIT+"</a></li>";
                                         $(".info-list").append($html);
                                     }
                                   }        
@@ -1010,13 +973,8 @@ data-dojo-props="design:'headline',gutters:false">
                 alert("error");
             }
         })
-      }
-      
-
-        
     })
-    function positionFeature(ring,name,district,content){
-      
+    function positionFeature(x,y,unit,address,cert_no,contact,operator,type,district,town,village){
         require([
             "esri/geometry/Point",
             "esri/SpatialReference",
@@ -1029,8 +987,6 @@ data-dojo-props="design:'headline',gutters:false">
             "esri/layers/GraphicsLayer",
             "esri/symbols/PictureMarkerSymbol",
             "esri/symbols/SimpleLineSymbol",
-            "esri/geometry/Polygon",
-            "esri/symbols/SimpleFillSymbol",
             "esri/dijit/InfoWindow"],function(
                 Point,
                 SpatialReference,
@@ -1043,25 +999,22 @@ data-dojo-props="design:'headline',gutters:false">
                 GraphicsLayer,
                 PictureMarkerSymbol,
                 SimpleLineSymbol,
-                Polygon,
-                SimpleFillSymbol,
-                InfoWindow){                   
+                InfoWindow){
                     layer.clear();
-                    //alert(ring);
-                    var polygon = new Polygon(ring);
-                    polygon.setSpatialReference(new SpatialReference({ wkid:2383 }));
-                    var cp=polygon.getCentroid();
-                    //alert(cp.y);
-                    //polygon.addRing(ring);
-                    var sfs = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,new SimpleLineSymbol(SimpleLineSymbol.STYLE_DASHDOT,new Color([0,0,0]), 2),new Color([255,255,0,0.25]));
-                    var gg = new Graphic(polygon,sfs);
+                    var cPoint = new Point();
+                    cPoint.x = x;
+                    cPoint.y = y;
+                    
+                    cPoint.setSpatialReference(new SpatialReference({ wkid:2383 }));
+                    var ptSymbol = new PictureMarkerSymbol('images/maps.png',40,40);
+                    var gg = new Graphic(cPoint,ptSymbol);
                     layer.add(gg);
                     map.addLayer(layer);
-                    
-                    map.infoWindow.setTitle(name);
-                    map.infoWindow.setContent("<table class='infoPopup'><tr><td class='td1'>项目名称：</td><td><a href='javascript:showDetail()'>"+name+"</a></td></tr><tr><td class='td1'>所在区：</td><td>"+district+"</td></tr><tr><td class='td1'>项目情况：</td><td>"+content+"</td></tr></table>");
-                    map.infoWindow.show(cp,InfoWindow.ANCHOR_UPPERRIGHT);
-                    map.centerAndZoom(cp,4);
+                                     
+                    map.infoWindow.setTitle(unit);
+                    map.infoWindow.setContent("<table class='infoPopup'><tr><td class='td1'>生产单位：</td><td><a href='javascript:showDetail()'>"+unit+"</a></td></tr><tr><td class='td1'>产地地址：</td><td>"+address+"</td></tr><tr><td class='td1'>证书编号：</td><td>"+cert_no+"</td></tr><tr><td class='td1'>产地联系人(电话)：</td><td>"+contact+"</td></tr><tr><td class='td1'>操作人(电话)：</td><td>"+operator+"</td></tr><tr><td class='td1'>类型：</td><td>"+type+"</td></tr><tr><td class='td1'>区名：</td><td>"+district+"</td></tr><tr><td class='td1'>镇名：</td><td>"+town+"</td></tr><tr><td class='td1'>村名：</td><td>"+village+"</td></tr></table>");
+                    map.infoWindow.show(cPoint,InfoWindow.ANCHOR_UPPERRIGHT);
+                    map.centerAndZoom(cPoint,4);   
 
         }) 
     }

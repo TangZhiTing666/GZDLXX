@@ -11,7 +11,7 @@
     <!-- <frame src="left.html" name="leftFrame" scrolling="No" noresize="noresize" id="leftFrame" title="leftFrame" /> -->
     <frame src="rightFrame.do?jspflog=${jspflog}" name="rightFrame" id="rightFrame" title="rightFrame" />
   </frameset>
-  <frame src="footer.html" name="bottomFrame" scrolling="No" noresize="noresize" id="bottomFrame" title="bottomFrame" />
+  <frame src="html/footer.html" name="bottomFrame" scrolling="No" noresize="noresize" id="bottomFrame" title="bottomFrame" />
 </frameset>
 <noframes><body>
 </body></noframes>

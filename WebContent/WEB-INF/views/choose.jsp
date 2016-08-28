@@ -117,55 +117,55 @@ z-index: 5;
 			$("#li_zh i img").attr('src',"resources/images/l01.png"); 
 		}else if(qxname=="现代农业"){
 			$("#li_xd").addClass("liLocked");
-			$("#li_xd").attr('onclick',"javascript:window.location.href='main.jsp?ipp=1'"); 
+			$("#li_xd").attr('onclick',"javascript:window.location.href='main.do?jspflog=2'"); 
 			$("#li_xd i img").attr('src',"resources/images/l02.png"); 		 	
 		}else if(qxname=="农经专题发布"){
 			$("#li_nj").addClass("liLocked");
-			$("#li_nj").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_nj").attr('onclick',"javascript:window.location.href='main.do?jspflog=3'"); 
 			$("#li_nj i img").attr('src',"resources/images/l03.png"); 		
 		}else if(qxname=="农业资源查询"){
 			$("#li_ny").addClass("liLocked");
-			$("#li_ny").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_ny").attr('onclick',"javascript:window.location.href='main.do?jspflog=4'"); 
 			$("#li_ny i img").attr('src',"resources/images/l04.png"); 
 		}else if(qxname=="标准化农田"){
 			$("#li_bz").addClass("liLocked");
-			$("#li_bz").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_bz").attr('onclick',"javascript:window.location.href='main.do?jspflog=5'"); 
 			$("#li_bz i img").attr('src',"resources/images/l05.png"); 
 		}else if(qxname=="无公害产品监管"){
 			$("#li_wgh").addClass("liLocked");
-			$("#li_wgh").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_wgh").attr('onclick',"javascript:window.location.href='main.do?jspflog=6'"); 
 			$("#li_wgh i img").attr('src',"resources/images/l06.png"); 
 		}else if(qxname=="番禺农业"){
 			$("#li_py").addClass("liLocked");
-			$("#li_py").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_py").attr('onclick',"javascript:window.location.href='main.do?jspflog=7'"); 
 			$("#li_py i img").attr('src',"resources/images/l07.png"); 
 		}else if(qxname=="新农村"){
 			$("#li_xnc").addClass("liLocked");
-			$("#li_xnc").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_xnc").attr('onclick',"javascript:window.location.href='main.do?jspflog=8'"); 
 			$("#li_xnc i img").attr('src',"resources/images/l08.png"); 
 		}else if(qxname=="农业产业化"){
 			$("#li_cyh").addClass("liLocked");
-			$("#li_cyh").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_cyh").attr('onclick',"javascript:window.location.href='main.do?jspflog=9'"); 
 			$("#li_cyh i img").attr('src',"resources/images/l09.png"); 
 		}else if(qxname=="定点供穗生猪"){
 			$("#li_dd").addClass("liLocked");
-			$("#li_dd").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_dd").attr('onclick',"javascript:window.location.href='main.do?jspflog=10'"); 
 			$("#li_dd i img").attr('src',"resources/images/l10.png"); 
 		}else if(qxname=="兽医行业"){
 			$("#li_sy").addClass("liLocked");
-			$("#li_sy").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_sy").attr('onclick',"javascript:window.location.href='main.do?jspflog=11'"); 
 			$("#li_sy i img").attr('src',"resources/images/l11.png"); 
 		}else if(qxname=="农业专项资金项目专家库"){
 			$("#li_zjk").addClass("liLocked");
-			$("#li_zjk").attr('onclick',""); 
+			$("#li_zjk").attr('onclick',"javascript:window.location.href='main.do?jspflog=12'"); 
 			$("#li_zjk i img").attr('src',"resources/images/l12.png"); 
 		}else if(qxname=="农机安全监理"){
 			$("#li_njaq").addClass("liLocked");
-			$("#li_njaq").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_njaq").attr('onclick',"javascript:window.location.href='main.do?jspflog=13'"); 
 			$("#li_njaq i img").attr('src',"resources/images/l13.png"); 
 		}else if(qxname=="在线更新"){
 		/* 	$("#li_zx").addClass("liLocked");
-			$("#li_zx").attr('onclick',"javascript:window.location.href='main.jsp'"); 
+			$("#li_zx").attr('onclick',"javascript:window.location.href='main.do?jspflog=14'"); 
 			$("#li_zx i img").attr('src',"resources/images/l14.png");  */
 		}else if(qxname=="广州菜篮子子系统"){
 			/* $("#li_clz").addClass("liLocked");

@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -16,17 +18,17 @@
 		#tab1{height: 600px;}
 		#app-right-top{top:40px !important;}
 	</style>
-	<link href="css/style.css" rel="stylesheet" type="text/css" />
-	<script language="JavaScript" src="js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="js/jquery.idTabs.min.js"></script>
-	<!-- <script type="text/javascript" src="js/jquery-1.4.4.min.js"></script> -->
-	<script type="text/javascript" src="js/jquery.jqprint-0.3.js"></script>
-	<link href="css/blue/style.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="js/jquery.tablesorter.js"></script>
+	<link href="resources/css/style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript" src="resources/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="resources/js/jquery.idTabs.min.js"></script>
+	<!-- <script type="text/javascript" src="jresources/s/jquery-1.4.4.min.js"></script> -->
+	<script type="text/javascript" src="resources/js/jquery.jqprint-0.3.js"></script>
+	<link href="resources/css/blue/style.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="resources/js/jquery.tablesorter.js"></script>
 
 	<link rel="stylesheet" href="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/dijit/themes/tundra/tundra.css">
     <link rel="stylesheet" href="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/esri/css/esri.css">
-    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="resources/css/map.css">
 	<script src="http://58.62.200.71:8098/arcgis_js_v316_api/arcgis_js_api/library/3.16/3.16/init.js"></script>
 </head>
 <body>
@@ -45,7 +47,7 @@
 	    	    </dd> -->	    
 	    <dd>
 	    <div class="title">
-	    <span><img src="images/leftico02.png" /></span>分析内容
+	    <span><img src="resources/images/leftico02.png" /></span>分析内容
 	    </div>
 	    <ul class="menuson1">
 	    	<li>
@@ -116,7 +118,7 @@
 	    </dd> 
 	    
 	    
-	    <dd id="Timeanaly"><div class="title"><span><img src="images/leftico03.png" /></span>分析时间</div>
+	    <dd id="Timeanaly"><div class="title"><span><img src="resources/images/leftico03.png" /></span>分析时间</div>
 	    <ul class="menuson1">
 	        <li>
 	        <div style="text-align: center;">年份：<select style="width: 30%">
@@ -159,7 +161,7 @@
 			    </dd> -->
 
 
-	    <dd id="yzanaly"><div class="title"><span><img src="images/leftico04.png" /></span>分析因子</div>
+	    <dd id="yzanaly"><div class="title"><span><img src="resources/images/leftico04.png" /></span>分析因子</div>
 	    <ul class="menuson1">
 	        <li id="yzTb">
 				<table  id="jbqkTTb" class="tableLeft">
@@ -481,54 +483,54 @@
                 <div class="tool-control-wrap">
                     <div class="left float-l">
                         <!-- <div class="remoteimage">
-                            <span id="remoteimage_control" class="last"><img src="images/icon/layer.png"></span>
+                            <span id="remoteimage_control" class="last"><img src="resources/images/icon/layer.png"></span>
                             <i>遥感影像</i>
                         </div>
                         <b></b> -->
                         <!-- <div class="statement">
-                            <span id="statement_control" class="last"><img src="images/icon/tongji.png"></span>
+                            <span id="statement_control" class="last"><img src="resources/images/icon/tongji.png"></span>
                             <i>统计报表</i>
                         </div>
                         <b></b> -->
                         <!-- <div class="legend">
-                            <span id="legend_control" class="last"><img src="images/icon/legendicon.png"></span>
+                            <span id="legend_control" class="last"><img src="resources/images/icon/legendicon.png"></span>
                             <i>图例</i>
                         </div>
                         <b></b> -->
                         <!-- <div class="fullscr">
-                            <span id="fullscr_control" class="last"><img src="images/icon/menu.png"></span>
+                            <span id="fullscr_control" class="last"><img src="resources/images/icon/menu.png"></span>
                             <i>全屏</i>
                         </div>
                         <b></b> -->
                         <div class="basictool">
-                            <span id="basictool_control" class="last"><img src="images/icon/menu.png"></span>
+                            <span id="basictool_control" class="last"><img src="resources/images/icon/menu.png"></span>
                             <i>工具</i>
                             <em></em>
                         </div>
                         <div class="detail-box">
                         <ul id="boxul" class="boxinfo">
                             <li id="zoomin">
-                                <span class="last"><img src="images/icon/zoomin.png"></span>
+                                <span class="last"><img src="resources/images/icon/zoomin.png"></span>
                                 <i>拉框放大</i>
                             </li>
                             <li id="zoomout">
-                               <span class="last"><img src="images/icon/zoomout.png"></span>
+                               <span class="last"><img src="resources/images/icon/zoomout.png"></span>
                                <i >拉框缩小</i>
                             </li>
                             <li id="zoomprev">
-                               <span class="last"><img src="images/icon/previous.png"></span>
+                               <span class="last"><img src="resources/images/icon/previous.png"></span>
                                <i>前一视图</i>
                             </li>
                             <li id="zoomnext">
-                               <span class="last"><img src="images/icon/next.png"></span>
+                               <span class="last"><img src="resources/images/icon/next.png"></span>
                                <i>后一视图</i>
                             </li>
                             <li id="pan" class="map-short">
-                               <span class="last"><img src="images/icon/pan.png"></span>
+                               <span class="last"><img src="resources/images/icon/pan.png"></span>
                                <i>平移</i>
                             </li>
                             <li id="extent" class="map-short">
-                               <span class="last"><img src="images/icon/earth.png"></span>
+                               <span class="last"><img src="resources/images/icon/earth.png"></span>
                                <i>全图</i>
                             </li>
                             <!-- <li id="printmap" class="map-short">
@@ -536,7 +538,7 @@
                                <i>打印</i>
                             </li> -->
                             <li id="deactivate" class="map-short">
-                               <span class="last"><img src="images/icon/close.png"></span>
+                               <span class="last"><img src="resources/images/icon/close.png"></span>
                                <i>取消</i>
                             </li> 
                              

@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=utf-8"
+    pageEncoding="utf-8"%>
+<%@ taglib uri="http://java.sun.com/jstl/core_rt" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
@@ -18,10 +21,10 @@
         }
         .addA,.updateA{font-size: 14px;}        
     </style>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <script language="JavaScript" src="js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/jquery.idTabs.min.js"></script>
-    <script type="text/javascript" src="js/select-ui.min.js"></script>    
+    <link href="resources/css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="resources/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="resources/js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="resources/js/select-ui.min.js"></script>    
     <script type="text/javascript">
         $(document).ready(function(e) {
             $(".select1").uedSelect({
@@ -74,7 +77,7 @@
         <dl class="leftmenu">                  
             <dd>
                 <div class="title">
-                    <span><img src="images/leftico02.png" /></span>数据录入
+                    <span><img src="resources/images/leftico02.png" /></span>数据录入
                 </div>
                 <ul class="menuson" style="display: block;">
                     <li class="active">
@@ -116,7 +119,7 @@
             </dd>
             <dd>
                 <div class="title">
-                    <span><img src="images/leftico02.png" /></span>数据审核
+                    <span><img src="resources/resources/images/leftico02.png" /></span>数据审核
                 </div>
                 <ul class="menuson" style="display: none;">
                     <li>
@@ -177,16 +180,16 @@
                     </ul>
                     <div class="tools">
                         <ul class="toolbar1">
-                            <li class="import"><span><img src="images/t01.png" /></span>导入</li>
-                            <li class="add"><span><img src="images/t01.png" /></span>添加</li>
-                            <li class="update"><span><img src="images/t02.png" /></span>修改</li>
-                            <li class="delete"><span><img src="images/t03.png" /></span>删除</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="import"><span><img src="resources/images/t01.png" /></span>导入</li>
+                            <li class="add"><span><img src="resources/images/t01.png" /></span>添加</li>
+                            <li class="update"><span><img src="resources/images/t02.png" /></span>修改</li>
+                            <li class="delete"><span><img src="resources/images/t03.png" /></span>删除</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                         <ul class="toolbar2 hide">
-                            <li class="pass"><span><img src="images/t01.png" /></span>通过</li>
-                            <li class="dispass"><span><img src="images/t02.png" /></span>不通过</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="pass"><span><img src="resources/images/t01.png" /></span>通过</li>
+                            <li class="dispass"><span><img src="resources/images/t02.png" /></span>不通过</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                     </div>
                     <table class="tablelist">
@@ -272,16 +275,16 @@
                     </ul>
                     <div class="tools">
                         <ul class="toolbar1">
-                            <li class="import"><span><img src="images/t01.png" /></span>导入</li>
-                            <li class="add"><span><img src="images/t01.png" /></span>添加</li>
-                            <li class="update"><span><img src="images/t02.png" /></span>修改</li>
-                            <li class="delete"><span><img src="images/t03.png" /></span>删除</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="import"><span><img src="resources/images/t01.png" /></span>导入</li>
+                            <li class="add"><span><img src="resources/images/t01.png" /></span>添加</li>
+                            <li class="update"><span><img src="resources/images/t02.png" /></span>修改</li>
+                            <li class="delete"><span><img src="resources/images/t03.png" /></span>删除</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                         <ul class="toolbar2 hide">
-                            <li class="pass"><span><img src="images/t01.png" /></span>通过</li>
-                            <li class="dispass"><span><img src="images/t02.png" /></span>不通过</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="pass"><span><img src="resources/images/t01.png" /></span>通过</li>
+                            <li class="dispass"><span><img src="resources/images/t02.png" /></span>不通过</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                     </div>
                     <table class="tablelist">
@@ -369,16 +372,16 @@
                     </ul>
                     <div class="tools">
                         <ul class="toolbar1">
-                            <li class="import"><span><img src="images/t01.png" /></span>导入</li>
-                            <li class="add"><span><img src="images/t01.png" /></span>添加</li>
-                            <li class="update"><span><img src="images/t02.png" /></span>修改</li>
-                            <li class="delete"><span><img src="images/t03.png" /></span>删除</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="import"><span><img src="resources/images/t01.png" /></span>导入</li>
+                            <li class="add"><span><img src="resources/images/t01.png" /></span>添加</li>
+                            <li class="update"><span><img src="resources/images/t02.png" /></span>修改</li>
+                            <li class="delete"><span><img src="resources/images/t03.png" /></span>删除</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                         <ul class="toolbar2 hide">
-                            <li class="pass"><span><img src="images/t01.png" /></span>通过</li>
-                            <li class="dispass"><span><img src="images/t02.png" /></span>不通过</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="pass"><span><img src="resources/images/t01.png" /></span>通过</li>
+                            <li class="dispass"><span><img src="resources/images/t02.png" /></span>不通过</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                     </div>
                     <table class="tablelist">
@@ -462,16 +465,16 @@
                     </ul>
                     <div class="tools">
                         <ul class="toolbar1">
-                            <li class="import"><span><img src="images/t01.png" /></span>导入</li>
-                            <li class="add"><span><img src="images/t01.png" /></span>添加</li>
-                            <li class="update"><span><img src="images/t02.png" /></span>修改</li>
-                            <li class="delete"><span><img src="images/t03.png" /></span>删除</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="import"><span><img src="resources/images/t01.png" /></span>导入</li>
+                            <li class="add"><span><img src="resources/images/t01.png" /></span>添加</li>
+                            <li class="update"><span><img src="resources/images/t02.png" /></span>修改</li>
+                            <li class="delete"><span><img src="resources/images/t03.png" /></span>删除</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                         <ul class="toolbar2 hide">
-                            <li class="pass"><span><img src="images/t01.png" /></span>通过</li>
-                            <li class="dispass"><span><img src="images/t02.png" /></span>不通过</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="pass"><span><img src="resources/images/t01.png" /></span>通过</li>
+                            <li class="dispass"><span><img src="resources/images/t02.png" /></span>不通过</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                     </div>
                     <table class="tablelist">
@@ -555,16 +558,16 @@
                     </ul>
                     <div class="tools">
                         <ul class="toolbar1">
-                            <li class="import"><span><img src="images/t01.png" /></span>导入</li>
-                            <li class="add"><span><img src="images/t01.png" /></span>添加</li>
-                            <li class="update"><span><img src="images/t02.png" /></span>修改</li>
-                            <li class="delete"><span><img src="images/t03.png" /></span>删除</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="import"><span><img src="resources/images/t01.png" /></span>导入</li>
+                            <li class="add"><span><img src="resources/images/t01.png" /></span>添加</li>
+                            <li class="update"><span><img src="resources/images/t02.png" /></span>修改</li>
+                            <li class="delete"><span><img src="resources/images/t03.png" /></span>删除</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                         <ul class="toolbar2 hide">
-                            <li class="pass"><span><img src="images/t01.png" /></span>通过</li>
-                            <li class="dispass"><span><img src="images/t02.png" /></span>不通过</li>
-                            <li class="refresh"><span><img src="images/t04.png" /></span>刷新</li>
+                            <li class="pass"><span><img src="resources/images/t01.png" /></span>通过</li>
+                            <li class="dispass"><span><img src="resources/images/t02.png" /></span>不通过</li>
+                            <li class="refresh"><span><img src="resources/images/t04.png" /></span>刷新</li>
                         </ul>
                     </div>
                     <table class="tablelist">
@@ -635,7 +638,7 @@
         <div class="tip" id="t_add">
             <div class="tiptop"><span>添加数据</span><a></a></div>        
             <div class="tipinfo">
-            <!-- <span><img src="images/ticon.png" /></span> -->
+            <!-- <span><img src="resources/images/ticon.png" /></span> -->
                 <div class="tipright">
                     <!-- <p>是否确认对信息的修改 ？</p>
                     <cite>如果是请点击确定按钮 ，否则请点取消。</cite> -->
@@ -718,7 +721,7 @@
         <div class="tip" id="t_update">
             <div class="tiptop"><span>修改数据</span><a></a></div>
             <div class="tipinfo">
-            <!-- <span><img src="images/ticon.png" /></span> -->
+            <!-- <span><img src="resources/images/ticon.png" /></span> -->
                 <div class="tipright">
                     <!-- <p>是否确认对信息的修改 ？</p>
                     <cite>如果是请点击确定按钮 ，否则请点取消。</cite> -->

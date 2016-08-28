@@ -704,7 +704,7 @@
     </table>
     <span style="margin-left: 100px;margin-top: 20px;">备注：空格为暂无数据</span>
     <div style="text-align: center;margin-top: 10px;margin-bottom: 10px;">
-        <input type="button" value="打印" id="printbtn2" style="cursor:pointer;background:url(resources/images/toolbg.gif) repeat-x;line-height:33px; height:33px;width: 100px; border:solid 1px #d3dbde;padding-left: 10px;padding-right:10px;border-radius: 3px;margin:0px auto;"></input>
+        <input type="button" value="打印" id="printbtn2" style="cursor:pointer;background:url(./images/toolbg.gif) repeat-x;line-height:33px; height:33px;width: 100px; border:solid 1px #d3dbde;padding-left: 10px;padding-right:10px;border-radius: 3px;margin:0px auto;"></input>
     </div>
 	</div>
 

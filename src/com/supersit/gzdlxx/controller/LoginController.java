@@ -64,6 +64,7 @@ public class LoginController {
 				//session.setMaxInactiveInterval(30*60);
     			model.addAttribute("resultitem",resultitem);
     		}else{
+    			System.out.println(22222222);
     			resultitem = userService.gobackchoose(userid);
     			model.addAttribute("resultitem",resultitem);
     		}
@@ -174,57 +175,58 @@ public class LoginController {
     			int flog=Integer.parseInt(jspflog);
     			switch (flog) {
 				case 1:
-					rightpage+="zhcx";
+					rightpage+="zhcx.do";
 					break;
 				case 2:
-					rightpage+="xdny";
+					rightpage+="xdny.do";
 					break;
 				case 3:
-					rightpage+="njzt";
+					rightpage+="njzt.do";
 					break;
 				case 4:
-					rightpage+="nyzy";
+					
+					rightpage+="nyzy.do";
 					break;
 				case 5:
-					rightpage+="bzhnt";
+					rightpage+="bzhnt.do";
 					break;
 				case 6:
-					rightpage+="wgh";
+					rightpage+="wgh.do";
 					break;
 				case 7:
-					rightpage+="pyny";
+					rightpage+="pyny.do";
 					break;
 				case 8:
-					rightpage+="xnc";
+					rightpage+="xnc.do";
 					break;
 				case 9:
-					rightpage+="nycyh";
+					rightpage+="nycyh.do";
 					break;
 				case 10:
-					rightpage+="gssz";
+					rightpage+="gssz.do";
 					break;
 				case 11:
-					rightpage+="syhy";
+					rightpage+="syhy.do";
 					break;
 				case 12:
-					rightpage+="zjk";
+					rightpage+="zjk.do";
 					break;
 				case 13:
-					rightpage+="njaq";
+					rightpage+="njaq.do";
 					break;
 				case 14:
-					rightpage+="zxgx";
+					rightpage+="zxgx.do";
 					break;
-				case 15:
+				/*case 15:
 					rightpage+="gzclz";
 					break;
-
+*/
 				default:
-					rightpage="redirect:/zhcx";
+					rightpage="redirect:/zhcx.do";
 					break;
 				}
     			System.out.println(rightpage);
-        return rightpage+".do";
+        return rightpage;
     }
     
     

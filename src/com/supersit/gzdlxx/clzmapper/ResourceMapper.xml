@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--parameterType=入参 类型(可省略)  resultType=返回类型-->
+<mapper namespace="com.supersit.gzdlxx.clzdao.ResourceDao">
+	<!-- 获取名称集合 -->
+	<select id="getNames" resultType="com.supersit.gzdlxx.pojo.Resourice">
+	SELECT
+	CLZ_RESOURCE.R_ID AS id,
+	CLZ_RESOURCE.NAMES as name,
+	CLZ_RESOURCE.ADDRESS as address,
+	CLZ_RESOURCE.TYPES as type,
+	CLZ_RESOURCE.INTRODUTION as jianjie
+	FROM
+	CLZ_RESOURCE
+	INNER JOIN CLZ_RESOURCE_TYPE ON CLZ_RESOURCE.R_TYPEID =CLZ_RESOURCE_TYPE.ID
+	WHERE
+	CLZ_RESOURCE_TYPE.NAMES =#{name}
+	</select>
+	
+	<!--名称模糊查询 获得资源数据 -->
+	<select id="getResouriceByName" resultType="com.supersit.gzdlxx.pojo.Resourice">
+	SELECT
+	CLZ_RESOURCE.R_ID AS id,
+	CLZ_RESOURCE.NAMES as name,
+	CLZ_RESOURCE.ADDRESS as address,
+	CLZ_RESOURCE.TYPES as type,
+	CLZ_RESOURCE.INTRODUTION as jianjie
+	FROM
+	CLZ_RESOURCE
+	INNER JOIN CLZ_RESOURCE_TYPE ON CLZ_RESOURCE.R_TYPEID = CLZ_RESOURCE_TYPE.ID
+	WHERE
+	CLZ_RESOURCE_TYPE.NAMES=#{typename} AND 
+	CLZ_RESOURCE.NAMES like '%${name}%'
+	</select>
+	
+	<!-- 通过id查询资源 -->
+	<select id="getResouriceById" resultType="com.supersit.gzdlxx.pojo.Resourice">
+	SELECT
+	CLZ_RESOURCE.R_ID AS id,
+	CLZ_RESOURCE.NAMES as name,
+	CLZ_RESOURCE.ADDRESS as address,
+	CLZ_RESOURCE.TYPES as type,
+	CLZ_RESOURCE.INTRODUTION as jianjie
+	FROM
+	CLZ_RESOURCE
+	WHERE	 
+	CLZ_RESOURCE.R_ID =#{id}
+	</select>
+</mapper>

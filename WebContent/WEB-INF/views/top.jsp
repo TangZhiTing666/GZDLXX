@@ -46,22 +46,22 @@
 	<div class="menu">
 		<table id="menu">
 			<tr>
-				<td><a href="gochoose.do" target="_top">首页</a></td>
-				<td><a href="zhcx.jsp" target="rightFrame">综合查询</a></td>
-				<td><a href="xdny.html" target="rightFrame">现代农业</a></td>
-				<td><a href="njzt.jsp" target="rightFrame">农经专题发布</a></td>
-				<td><a href="nyzy.jsp" target="rightFrame">农业资源查询</a></td>
-				<td><a href="bzhnt.html" target="rightFrame">标准化农田</a></td>
-				<td><a href="wgh.html" target="rightFrame">无公害产品监管</a></td>
-				<td><a href="pyny.html" target="rightFrame" id="pyny">番禺农业</a></td>
-				<td><a href="xnc.html" target="rightFrame" id="xnc">新农村</a></td>
-				<td><a href="nycyh.html" target="rightFrame">农业产业化</a></td>
-				<td><a href="gssz.html" target="rightFrame">定点供穗生猪</a></td>
-				<td><a href="syhy.html" target="rightFrame">兽医行业</a></td>
-				<td><a href="zjk.html" target="rightFrame">农业专项资金项目专家库</a></td>
-				<td><a href="njaq.html" target="rightFrame">农机安全监理</a></td>
-				<td><a href="gzclz.html" target="rightFrame">广州市“菜篮子”</a></td>
-				<td><a href="zxgx.jsp" target="rightFrame" id="zxgx">在线更新</a></td>				
+				<td><a href="gobackchoose.do?userid=-8" target="_top">首页</a></td>
+				<td><a href="rightFrame.do?jspflog=1" target="rightFrame">综合查询</a></td>
+				<td><a href="html/xdny.html" target="rightFrame">现代农业</a></td>
+				<td><a href="rightFrame.do?jspflog=3" target="rightFrame">农经专题发布</a></td>
+				<td><a href="rightFrame.do?jspflog=4" target="rightFrame">农业资源查询</a></td>
+				<td><a href="html/bzhnt.html" target="rightFrame">标准化农田</a></td>
+				<td><a href="html/wgh.html" target="rightFrame">无公害产品监管</a></td>
+				<td><a href="html/pyny.html" target="rightFrame" id="pyny">番禺农业</a></td>
+				<td><a href="html/xnc.html" target="rightFrame" id="xnc">新农村</a></td>
+				<td><a href="html/nycyh.html" target="rightFrame">农业产业化</a></td>
+				<td><a href="html/gssz.html" target="rightFrame">定点供穗生猪</a></td>
+				<td><a href="html/syhy.html" target="rightFrame">兽医行业</a></td>
+				<td><a href="html/zjk.html" target="rightFrame">农业专项资金项目专家库</a></td>
+				<td><a href="html/njaq.html" target="rightFrame">农机安全监理</a></td>
+				<td><a href="html/gzclz.html" target="rightFrame">广州市“菜篮子”</a></td>
+				<td><a href="rightFrame.do?jspflog=14" target="rightFrame" id="zxgx">在线更新</a></td>				
 			</tr>
 		</table>
 	</div>
