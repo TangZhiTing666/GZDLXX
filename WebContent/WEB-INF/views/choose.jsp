@@ -10,6 +10,12 @@
 <link href="resources/css/demo.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" src="resources/js/jquery-1.9.1.min.js"></script>
 <script language="javascript">
+
+	<!--获取主机IP地址-->
+	var curWwwPath=window.document.location.href;
+	var pathName=window.document.location.pathname;
+	var pos=curWwwPath.indexOf(pathName);
+	var localhostPahIP=curWwwPath.substring(0,pos);
 	$(function(){
     $('.loginbox0').css({'position':'absolute','left':($(window).width()-880)/2});
 	$(window).resize(function(){  
@@ -172,8 +178,8 @@ z-index: 5;
 			$("#li_clz").attr('onclick',"javascript:window.location.href='main.jsp'"); 
 			$("#li_clz i img").attr('src',"resources/images/l15.png");  */
 			$("#li_zx").addClass("liLocked");
-			$("#li_zx").attr('onclick',"javascript:window.location.href='http://localhost:7080/GZCLZ/main.do?userid=-8'"); 
-			$("#li_zx i img").attr('src',"resources/images/l15.png"); 
+			$("#li_zx").attr('onclick',"javascript:window.location.href='"+localhostPahIP+"/GZCLZ/main.do?userid=-8'");
+			$("#li_zx i img").attr('src',"resources/images/l15.png");
 		}
 		</c:forEach> 
 	}
