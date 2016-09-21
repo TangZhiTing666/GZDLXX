@@ -11,7 +11,8 @@
 <script language="JavaScript" src="resources/js/jquery-1.9.1.min.js"></script>
 <script language="javascript">
 
-	<!--获取主机IP地址-->
+	<!--获取主机动态IP地址-->
+
 	var curWwwPath=window.document.location.href;
 	var pathName=window.document.location.pathname;
 	var pos=curWwwPath.indexOf(pathName);
